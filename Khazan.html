@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Khazan Skill Tree Visualizer (Layout Update 5)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="p-6 md:p-10">
+    <div id="topRightInfo">
+      <div class="info-item">
+        <label for="levelInput" class="info-label">Mastery Level:</label>
+        <input type="number" id="levelInput" value="1" min="1" max="60" />
+      </div>
+      <div class="info-item">
+        <span class="info-label">Skill Points:</span>
+        <span id="remainingPoints" class="info-value text-blue-400">0</span>
+      </div>
+    </div>
+
+    <div class="container mx-auto max-w-6xl text-center">
+      <h1 class="text-3xl md:text-4xl font-bold mb-6 text-red-400 pt-16">
+        Khazan Skill Tree Visualizer
+      </h1>
+
+      <div class="controls mb-4 flex justify-center items-center">
+        <button
+          id="resetButton"
+          class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow transition duration-200 ease-in-out"
+        >
+          Reset ALL Points
+        </button>
+      </div>
+
+      <p class="text-xs text-gray-500 mb-3">
+        <span class="font-semibold">Click</span> a skill to select/allocate.
+        <span class="font-semibold">Right-click</span> to deallocate. Hover for
+        name. Details below.
+      </p>
+
+      <div id="descriptionPanel" class="max-w-3xl mx-auto">
+        <h3 id="skillDetailName">Select a skill</h3>
+        <p id="skillDetailDesc">
+          Skill details will appear here when you click a node in the tree.
+        </p>
+        <div id="skillDetailReqs"></div>
+      </div>
+
+      <div class="tabs-container">
+        <span class="key-indicator">Q</span>
+        <div id="treeTabs"></div>
+        <span class="key-indicator">E</span>
+      </div>
+
+      <div class="layout-container">
+        <div id="levelMarkers" class="level-markers"></div>
+
+        <div class="skill-tree-area w-full max-w-none px-4">
+          <div id="columnHeaders"></div>
+          <div id="skillTree" class="skill-tree-container relative"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      // --- Skill Tree Data (Unchanged from previous version) ---
+      const skillTreeData = {
+        "Dual Wield": [
+          // FIRST TAB - Max Column Index is 3
+          // Column 0: Swift Attack Path (Binary Tree Structure)
+          {
+            id: "dw_blz_asl",
+            name: "Blazing Assault",
+            description:
+              "Gain the ability to use the fifth strike of a swift attack. No requirements.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 1,
+            position: { row: 1, col: 1 },
+            icon: "Blaze Assault",
+            columnTitle: "Swift Attack",
+          },
+          // Right branch
+          // Left branch children
+          {
+            id: "dw_drg_int",
+            name: "Dragon Slayer: Intuition",
+            description:
+              "Hold Potent Blow after Dragon Slayer. Press Potent Blow again after Dragon Slayer for double slash. Requires Mastery Level 10.",
+            maxPoints: 1,
+            prerequisites: ["dw_drg_slr"],
+            cost: 1,
+            tier: 3,
+            position: { row: 3, col: -1.5 }, // Left child of left branch
+            icon: "DS Intuit",
+          },
+          {
+            id: "dw_drg_prc",
+            name: "Dragon Slayer: Precision",
+            description:
+              "Increases critical hit chance of Dragon Slayer attacks. Requires Mastery Level 10.",
+            maxPoints: 1,
+            prerequisites: ["dw_drg_slr"],
+            cost: 1,
+            tier: 3,
+            position: { row: 3, col: -0.5 }, // Right child of left branch
+            icon: "DS Precision",
+          },
+          // Right branch children
+          {
+            id: "dw_swf_flw",
+            name: "Swift Flow",
+            description:
+              "Reduces stamina cost of swift attacks. Requires Mastery Level 10.",
+            maxPoints: 1,
+            prerequisites: ["dw_swf_str"],
+            cost: 1,
+            tier: 3,
+            position: { row: 3, col: 0.5 }, // Left child of right branch
+            icon: "Swift Flow",
+          },
+          {
+            id: "dw_swf_frc",
+            name: "Swift Force",
+            description:
+              "Increases damage of swift attacks. Requires Mastery Level 10.",
+            maxPoints: 1,
+            prerequisites: ["dw_swf_str"],
+            cost: 1,
+            tier: 3,
+            position: { row: 3, col: 1.5 }, // Right child of right branch
+            icon: "Swift Force",
+          },
+          // Bottom tier skills
+          {
+            id: "dw_drg_chn",
+            name: "Dragon Slayer: Chain",
+            description:
+              "Press Potent Blow after Dragon Slayer: Intuition. Leap into air with attack. Press Potent Blow again during upward attack for downward attack. Requires Mastery Level 18.",
+            maxPoints: 1,
+            prerequisites: ["dw_drg_int"],
+            cost: 1,
+            tier: 4,
+            position: { row: 4, col: -1.5 }, // Aligned with parent (left child of left branch)
+            icon: "DS Chain",
+          },
+          {
+            id: "dw_drg_mom",
+            name: "Dragon Slayer: Momentum",
+            description:
+              "Hold Potent Blow for special stance instead of charge... Requires ML 34, Pilgrim's DW equipped.",
+            maxPoints: 1,
+            prerequisites: ["dw_drg_chn"],
+            cost: 1,
+            tier: 5,
+            position: { row: 5, col: -1.5 }, // Aligned with parent (left child of left branch)
+            icon: "DS Moment",
+          },
+          // Ruthless path removed from this column for now, needs clear placement/prereqs
+
+          // Column 1: Potent Blow Path
+          {
+            id: "dw_howl",
+            name: "Howling Blade",
+            description:
+              "Potent Blow during swift attack/dodge swift attack/Blowback: Vengeance... Requires Mastery Level 2.",
+            maxPoints: 1,
+            prerequisites: ["co_bbk_vng"],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 0 },
+            icon: "Howl Blade",
+            columnTitle: "Swift Attack",
+          },
+          {
+            id: "dw_whirl",
+            name: "Whirlwind",
+            description:
+              "Spin with your blades, damaging nearby enemies. Requires Mastery Level 2.",
+            maxPoints: 1,
+            prerequisites: ["dw_blz_asl"],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 2 },
+            icon: "Whirlwind",
+          },
+
+          {
+            id: "dw_howl_pun",
+            name: "Howling Blade: Punishment",
+            description:
+              "Potent Blow after 4th swift attack or Blazing Assault... Requires Mastery Level 10.",
+            maxPoints: 1,
+            prerequisites: ["dw_howl", "dw_blz_asl"],
+            cost: 1,
+            tier: 3,
+            position: { row: 3, col: 1 },
+            icon: "Howl Punish",
+          },
+          {
+            id: "dw_howl_res",
+            name: "Howling Blade: Resolve",
+            description:
+              "Potent Blow after 4th swift attack or Blazing Assault... Requires Mastery Level 18.",
+            maxPoints: 1,
+            prerequisites: ["dw_howl_pun"],
+            cost: 1,
+            tier: 4,
+            position: { row: 4, col: 1 },
+            icon: "Howl Resolve",
+          },
+          {
+            id: "dw_flash",
+            name: "Flash Cutter",
+            description:
+              "Command: Ranged Skill Key + Potent Blow. Uses Spirit 1... Requires Mastery Level 10.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 3,
+            position: { row: 3, col: 1 },
+            icon: "Flash Cut",
+          }, // Parallel start in column 1
+          {
+            id: "dw_flash_ctr",
+            name: "Flash Cutter: Counter",
+            description:
+              "Nullify incoming damage during Flash Cutter attack & break enemy stance... Requires Mastery Level 26.",
+            maxPoints: 1,
+            prerequisites: ["dw_flash"],
+            cost: 1,
+            tier: 5,
+            position: { row: 5, col: 1 },
+            icon: "Flash Countr",
+          },
+          {
+            id: "dw_flash_dec",
+            name: "Flash Cutter: Decollation",
+            description:
+              "Deliver follow-up strike after Flash Cutter when striking exhausted enemy. Requires Mastery Level 34.",
+            maxPoints: 1,
+            prerequisites: ["dw_flash_ctr"],
+            cost: 1,
+            tier: 6,
+            position: { row: 6, col: 1 },
+            icon: "Flash Decol",
+          },
+          {
+            id: "dw_flash_shft",
+            name: "Flash Cutter: Shift",
+            description:
+              "Gain additional spirit when defeating enemy with Flash Cutter... Requires ML 34, Flash Cutter: Decollation, Mysterious Glyph DW equipped.",
+            maxPoints: 1,
+            prerequisites: ["dw_flash_dec"],
+            cost: 1,
+            tier: 7,
+            position: { row: 7, col: 1 },
+            icon: "Flash Shift",
+          },
+
+          // Column 2: Frenzy Path
+          {
+            id: "dw_whirl",
+            name: "Whirlwind",
+            description:
+              "Spin with your blades, damaging nearby enemies. Requires Mastery Level 2.",
+            maxPoints: 1,
+            prerequisites: ["dw_blz_asl"],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 2 },
+            icon: "Whirlwind",
+            columnTitle: "Swift Attack",
+          },
+          {
+            id: "dw_frenzy_placeholder2",
+            name: "Frenzy Skill 2",
+            description: "Placeholder Frenzy Skill.",
+            maxPoints: 1,
+            prerequisites: ["dw_frenzy_placeholder1"],
+            cost: 1,
+            tier: 3,
+            position: { row: 3, col: 2 },
+            icon: "Frenzy 2",
+          },
+          {
+            id: "dw_wind_p",
+            name: "Wind Piercer",
+            description:
+              "Command: Assign Input. Uses Spirit 2... Requires Mastery Level 10.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 3,
+            position: { row: 3, col: 2 },
+            icon: "Wind Pierce",
+          },
+          {
+            id: "dw_zephyr",
+            name: "Zephyr",
+            description:
+              "Command: Assign Input. Uses Spirit 1... Requires Mastery Level 18.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 4,
+            position: { row: 4, col: 2 },
+            icon: "Zephyr",
+          },
+          {
+            id: "dw_wind_p_per",
+            name: "Wind Piercer: Persistance",
+            description:
+              "When Wind Piercer axe hits, it persists dealing damage... Requires Mastery Level 26.",
+            maxPoints: 1,
+            prerequisites: ["dw_wind_p"],
+            cost: 1,
+            tier: 5,
+            position: { row: 5, col: 2 },
+            icon: "WP Persist",
+          },
+          {
+            id: "dw_wind_p_mark",
+            name: "Wind Piercer: Mark",
+            description:
+              "Increase duration of Wind Piercer: Persistence axe-spinning... Requires Mastery Level 34.",
+            maxPoints: 1,
+            prerequisites: ["dw_wind_p_per"],
+            cost: 1,
+            tier: 6,
+            position: { row: 6, col: 2 },
+            icon: "WP Mark",
+          },
+
+          // Column 3: Penetrate Path
+          {
+            id: "dw_penetrate_placeholder1",
+            name: "Penetrate Skill 1",
+            description: "Placeholder Penetrate Skill.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 3 },
+            icon: "Penetrate 1",
+            columnTitle: "Penetrate",
+          },
+          {
+            id: "dw_gale",
+            name: "Gale",
+            description:
+              "Hold Potent Blow. Charged Potent Blows inflict Injured status... Requires Mastery Level 2.",
+            maxPoints: 1,
+            prerequisites: ["co_agg_act"],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 3 },
+            icon: "Gale",
+          },
+          {
+            id: "dw_gale_scar",
+            name: "Gale: Scar",
+            description:
+              "Detonate accumulated vigor (at 10 stacks) when hitting with Gale... Requires Mastery Level 10.",
+            maxPoints: 1,
+            prerequisites: ["dw_gale"],
+            cost: 1,
+            tier: 3,
+            position: { row: 3, col: 3 },
+            icon: "Gale Scar",
+          },
+          {
+            id: "dw_gale_smash",
+            name: "Gale: Smash",
+            description:
+              "Hold Potent Blow when landing Gale strike. Uses Spirit 2... Requires Mastery Level 18.",
+            maxPoints: 1,
+            prerequisites: ["dw_gale_scar"],
+            cost: 1,
+            tier: 4,
+            position: { row: 4, col: 3 },
+            icon: "Gale Smash",
+          },
+          {
+            id: "dw_gale_doom",
+            name: "Gale: Doom",
+            description:
+              "Command: Assign Input. Uses Fury 4... Requires ML 34, Bloodthirsty Fiend Set equipped.",
+            maxPoints: 1,
+            prerequisites: ["dw_gale_smash"],
+            cost: 1,
+            tier: 5,
+            position: { row: 5, col: 3 },
+            icon: "Gale Doom",
+          },
+          {
+            id: "dw_phant_sd",
+            name: "Phantom: Sword Dance",
+            description:
+              "Command: Ranged Attack/Skill Key + Potent Blow. Uses Spirit 2... Requires Mastery Level 18.",
+            maxPoints: 1,
+            prerequisites: ["dw_howl" /*, 'dw_whirl' removed*/],
+            cost: 1,
+            tier: 4,
+            position: { row: 4, col: 3 },
+            icon: "Phant SD",
+          }, // Removed Whirl prereq as Whirl is removed
+          {
+            id: "dw_phant_blood",
+            name: "Phantom: Bloody Sword Dance",
+            description:
+              "Enhance Phantom: Sword Dance... Requires ML 34, Phantom: Sword Dance, Bloodthirsty Fiend DW equipped.",
+            maxPoints: 1,
+            prerequisites: ["dw_phant_sd"],
+            cost: 1,
+            tier: 6,
+            position: { row: 6, col: 3 },
+            icon: "Phant Blood",
+          },
+          {
+            id: "dw_phant_shad",
+            name: "Phantom: Shadow Sword Dance",
+            description:
+              "Phantom aids in danger... Requires ML 34, Phantom: Sword Dance, Beastslayer DW equipped.",
+            maxPoints: 1,
+            prerequisites: ["dw_phant_sd"],
+            cost: 1,
+            tier: 6,
+            position: { row: 6, col: 3 },
+            icon: "Phant Shadow",
+          },
+        ],
+        "Great Sword": [
+          // SECOND TAB
+          {
+            id: "gs_s1",
+            name: "GS: Basic Training",
+            description: "Basic Great Sword attack damage increased slightly.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 1,
+            position: { row: 1, col: 3 },
+            icon: "GS Train",
+            columnTitle: "Basic GS",
+          },
+          {
+            id: "gs_s2",
+            name: "GS: Heavy Slam",
+            description:
+              "Perform a powerful overhead slam with the Great Sword. Requires GS Basic Training.",
+            maxPoints: 1,
+            prerequisites: ["gs_s1"],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 2 },
+            icon: "GS Slam",
+          },
+          {
+            id: "gs_s3",
+            name: "GS: Guard Breaker",
+            description:
+              "Great Sword attacks deal more damage to blocking enemies. Requires GS Basic Training.",
+            maxPoints: 3,
+            prerequisites: ["gs_s1"],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 4 },
+            icon: "GS Guard Break",
+          },
+          {
+            id: "gs_s4",
+            name: "GS: Sundering Cleave",
+            description:
+              "A wide, sweeping attack that can hit multiple foes. Requires Heavy Slam.",
+            maxPoints: 1,
+            prerequisites: ["gs_s2"],
+            cost: 2,
+            tier: 3,
+            position: { row: 3, col: 2 },
+            icon: "GS Cleave",
+          },
+          {
+            id: "gs_s5",
+            name: "GS: Charge Attack",
+            description:
+              "Hold attack button to charge a devastating blow. Requires Guard Breaker.",
+            maxPoints: 1,
+            prerequisites: ["gs_s3"],
+            cost: 2,
+            tier: 3,
+            position: { row: 3, col: 4 },
+            icon: "GS Charge",
+          },
+          {
+            id: "gs_s6",
+            name: "GS: Berserk Infusion",
+            description:
+              "Great Sword attacks have a chance to trigger Berserker effects. Requires GS Basic Training and CO: Core Strength.",
+            maxPoints: 1,
+            prerequisites: ["gs_s1", "co_s1"],
+            cost: 3,
+            tier: 3,
+            position: { row: 3, col: 3 },
+            icon: "GS Infuse",
+          },
+        ],
+        Spear: [
+          // THIRD TAB
+          {
+            id: "sp_s1",
+            name: "SP: Precise Thrust",
+            description: "Basic Spear attacks have increased critical chance.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 1,
+            position: { row: 1, col: 3 },
+            icon: "SP Thrust",
+            columnTitle: "Thrust",
+          },
+          {
+            id: "sp_s2",
+            name: "SP: Reach",
+            description:
+              "Increases the range of spear attacks. Requires Precise Thrust.",
+            maxPoints: 2,
+            prerequisites: ["sp_s1"],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 2 },
+            icon: "SP Reach",
+          },
+          {
+            id: "sp_s3",
+            name: "SP: Impale",
+            description:
+              "A strong forward thrust that can stagger enemies. Requires Precise Thrust.",
+            maxPoints: 1,
+            prerequisites: ["sp_s1"],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 4 },
+            icon: "SP Impale",
+          },
+          {
+            id: "sp_s4",
+            name: "SP: Sweeping Arc",
+            description:
+              "A wide horizontal sweep with the spear. Requires Reach.",
+            maxPoints: 1,
+            prerequisites: ["sp_s2"],
+            cost: 2,
+            tier: 3,
+            position: { row: 3, col: 2 },
+            icon: "SP Sweep",
+          },
+        ],
+        Common: [
+          // FOURTH TAB
+          {
+            id: "co_s1",
+            name: "CO: Core Strength",
+            description: "Slightly increases overall physical damage.",
+            maxPoints: 5,
+            prerequisites: [],
+            cost: 1,
+            tier: 1,
+            position: { row: 1, col: 1 },
+            icon: "Strength",
+            columnTitle: "Core Stats",
+          },
+          {
+            id: "co_s2",
+            name: "CO: Resilience",
+            description: "Slightly increases maximum health.",
+            maxPoints: 5,
+            prerequisites: [],
+            cost: 1,
+            tier: 1,
+            position: { row: 1, col: 5 },
+            icon: "Resil ience",
+          }, // Might need own column?
+          {
+            id: "co_agg_act",
+            name: "Aggressive Action",
+            description:
+              "Potent Blow during dodge. Enhance attack from activating Potent Blow while dodging. Hold Potent Blow for charged version. No requirements.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 1,
+            position: { row: 1, col: 2 },
+            icon: "Aggro Action",
+            columnTitle: "Actions",
+          },
+          //{ id: 'co_blz_asl', name: 'Blazing Assault', description: 'Gain the ability to use the fifth strike of a swift attack. No requirements.', maxPoints: 1, prerequisites: [], cost: 1, tier: 1, position: { row: 1, col: 0 }, icon: 'Blaze Assault' }, // MOVED TO DUAL WIELD
+          {
+            id: "co_bbk",
+            name: "Blowback",
+            description:
+              "Deal damage to enemies when performing a brink guard. No requirements.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 1,
+            position: { row: 1, col: 4 },
+            icon: "Blow back",
+            columnTitle: "Defense",
+          },
+          {
+            id: "co_fleet",
+            name: "Fleet Footed",
+            description:
+              "Decrease the stamina cost of dodging. No requirements.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 1,
+            position: { row: 1, col: 6 },
+            icon: "Fleet Foot",
+            columnTitle: "Mobility",
+          },
+          {
+            id: "co_mass_blow",
+            name: "Massive Blow",
+            description:
+              "Press Potent Blow after 3rd Potent Blow attack or charged Potent Blow... No requirements.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 1,
+            position: { row: 1, col: 3 },
+            icon: "Massive Blow",
+          },
+          {
+            id: "co_nimble",
+            name: "Nimble Blitz",
+            description:
+              "Swift Attack/Fire Ranged Attack while dodging... No requirements.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 1,
+            position: { row: 1, col: 7 },
+            icon: "Nimble Blitz",
+          },
+          {
+            id: "co_outrage",
+            name: "Outrage",
+            description: "Potent Blow while sprinting... No requirements.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 1,
+            position: { row: 0, col: 3 },
+            icon: "Outrage",
+          },
+          {
+            id: "co_wind_chsr",
+            name: "Wind Chaser",
+            description:
+              "Press Swift Attack or Potent Blow after sprint attack... No requirements.",
+            maxPoints: 1,
+            prerequisites: [],
+            cost: 1,
+            tier: 1,
+            position: { row: 0, col: 4 },
+            icon: "Wind Chaser",
+          },
+          {
+            id: "co_s4",
+            name: "CO: Battle Fury",
+            description:
+              "Gain a temporary damage boost after taking damage. Requires Core Strength.",
+            maxPoints: 1,
+            prerequisites: ["co_s1"],
+            cost: 2,
+            tier: 2,
+            position: { row: 2, col: 1 },
+            icon: "Battle Fury",
+          },
+          {
+            id: "co_bbk_vng",
+            name: "Blowback: Vengeance",
+            description:
+              "Press Swift Attack/Fire Ranged Attack after successful Blowback... Requires Mastery Level 2.",
+            maxPoints: 1,
+            prerequisites: ["co_bbk"],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 4 },
+            icon: "BBK Venge",
+          },
+          {
+            id: "co_cold_stam",
+            name: "Cold Blood: Stamina",
+            description:
+              "Recover stamina upon performing a brink dodge. Requires Mastery Level 2.",
+            maxPoints: 1,
+            prerequisites: ["co_fleet"],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 6 },
+            icon: "Cold Stam",
+          },
+          {
+            id: "co_deft",
+            name: "Deftness",
+            description:
+              "Move forward + Dodge while attacking... Requires Mastery Level 2.",
+            maxPoints: 1,
+            prerequisites: ["co_nimble"],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 7 },
+            icon: "Deft ness",
+          },
+          {
+            id: "co_ironclad",
+            name: "Ironclad",
+            description:
+              "Decrease the amount of stamina consumed on a successful guard. Requires Mastery Level 2.",
+            maxPoints: 1,
+            prerequisites: ["co_bbk"],
+            cost: 1,
+            tier: 2,
+            position: { row: 2, col: 5 },
+            icon: "Iron clad",
+          },
+          {
+            id: "co_wind_chsr_sw",
+            name: "Wind Chaser: Swift",
+            description:
+              "Potent Blow after a sprint attack... Requires Mastery Level 2.",
+            maxPoints: 1,
+            prerequisites: ["co_wind_chsr"],
+            cost: 1,
+            tier: 2,
+            position: { row: 1, col: 4 },
+            icon: "WC Swift",
+          },
+          {
+            id: "co_s3",
+            name: "CO: Vigor",
+            description:
+              "Increases stamina regeneration rate. Requires Resilience.",
+            maxPoints: 3,
+            prerequisites: ["co_s2"],
+            cost: 1,
+            tier: 3,
+            position: { row: 3, col: 5 },
+            icon: "Vigor",
+          },
+          {
+            id: "co_disc_act",
+            name: "Disciplined Action",
+            description:
+              "Invincibility duration of dodges increases in proportion to your agility. Requires Mastery Level 10.",
+            maxPoints: 1,
+            prerequisites: ["co_fleet"],
+            cost: 1,
+            tier: 3,
+            position: { row: 3, col: 6 },
+            icon: "Disc Action",
+          },
+          {
+            id: "co_rev",
+            name: "Reversal",
+            description:
+              "Neutral or Back + Dodge/Sprint after successful guard... Requires Mastery Level 10.",
+            maxPoints: 1,
+            prerequisites: ["co_bbk_vng"],
+            cost: 1,
+            tier: 3,
+            position: { row: 3, col: 4 },
+            icon: "Reversal",
+          },
+          {
+            id: "co_cold_spr",
+            name: "Cold Blood: Spirit",
+            description:
+              "Gain spirit upon performing a brink dodge. Requires Mastery Level 18.",
+            maxPoints: 1,
+            prerequisites: ["co_cold_stam"],
+            cost: 1,
+            tier: 4,
+            position: { row: 4, col: 6 },
+            icon: "Cold Spirit",
+          },
+          {
+            id: "co_deft_light",
+            name: "Deftness: Lightfoot",
+            description:
+              "Increase distance traveled when dodging and increase damage of Deftness. Requires Mastery Level 18.",
+            maxPoints: 1,
+            prerequisites: ["co_deft"],
+            cost: 1,
+            tier: 4,
+            position: { row: 4, col: 7 },
+            icon: "Deft Light",
+          },
+          {
+            id: "co_rev_asl",
+            name: "Reversal: Assault",
+            description:
+              "Allows Reversal to be charged... Requires Mastery Level 18.",
+            maxPoints: 1,
+            prerequisites: ["co_rev"],
+            cost: 1,
+            tier: 4,
+            position: { row: 4, col: 4 },
+            icon: "Rev Assault",
+          },
+          {
+            id: "co_disc_agil",
+            name: "Disciplined Action: Agility",
+            description:
+              "Increase the invincibility duration of dodges. Requires Mastery Level 26.",
+            maxPoints: 1,
+            prerequisites: ["co_disc_act"],
+            cost: 1,
+            tier: 5,
+            position: { row: 5, col: 6 },
+            icon: "Disc Agility",
+          },
+          {
+            id: "co_rev_flow",
+            name: "Reversal: Flow",
+            description:
+              "Neutral or Back + Dodge/Sprint during normal attack... Requires Mastery Level 26.",
+            maxPoints: 1,
+            prerequisites: ["co_rev_asl"],
+            cost: 1,
+            tier: 5,
+            position: { row: 5, col: 4 },
+            icon: "Rev Flow",
+          },
+        ],
+      };
+
+      // --- State Variables ---
+      let currentLevel = 1;
+      let totalSkillPoints = 0;
+      let spentSkillPoints = 0;
+      let currentTreeId = Object.keys(skillTreeData)[0]; // Default set by data order
+      let allocatedSkills = {};
+      let selectedSkillId = null;
+      const tabOrder = ["Dual Wield", "Great Sword", "Spear", "Common"]; // Define tab order for navigation
+
+      // --- DOM Elements ---
+      const levelInput = document.getElementById("levelInput");
+      const remainingPointsDisplay = document.getElementById("remainingPoints");
+      const resetButton = document.getElementById("resetButton");
+      const skillTreeContainer = document.getElementById("skillTree");
+      const treeTabsContainer = document.getElementById("treeTabs");
+      const descriptionPanel = document.getElementById("descriptionPanel");
+      const skillDetailName = document.getElementById("skillDetailName");
+      const skillDetailDesc = document.getElementById("skillDetailDesc");
+      const skillDetailReqs = document.getElementById("skillDetailReqs");
+      const levelMarkersContainer = document.getElementById("levelMarkers");
+      const columnHeadersContainer = document.getElementById("columnHeaders");
+
+      // --- Utility Functions ---
+      function findSkillData(skillId) {
+        for (const treeId in skillTreeData) {
+          const skill = skillTreeData[treeId].find((s) => s.id === skillId);
+          if (skill) {
+            return { ...skill, treeId: treeId };
+          }
+        }
+        return null;
+      }
+
+      // --- Core Functions ---
+      function initializeAllocatedSkills() {
+        allocatedSkills = {};
+        Object.keys(skillTreeData).forEach((treeId) => {
+          allocatedSkills[treeId] = {};
+        });
+        selectedSkillId = null;
+        updateDescriptionPanel(null);
+      }
+
+      function calculateTotalPoints(level) {
+        return Math.max(0, level);
+      }
+
+      function checkPrerequisites(skillId) {
+        const skillInfo = findSkillData(skillId);
+        if (
+          !skillInfo ||
+          !skillInfo.prerequisites ||
+          skillInfo.prerequisites.length === 0
+        ) {
+          return true;
+        }
+        return skillInfo.prerequisites.every((prereqId) => {
+          for (const treeId in allocatedSkills) {
+            if ((allocatedSkills[treeId][prereqId] || 0) > 0) {
+              return true;
+            }
+          }
+          return false;
+        });
+      }
+
+      function calculateTotalSpentPoints() {
+        let totalSpent = 0;
+        for (const treeId in allocatedSkills) {
+          for (const skillId in allocatedSkills[treeId]) {
+            const points = allocatedSkills[treeId][skillId];
+            if (points > 0) {
+              const skillInfo = findSkillData(skillId);
+              if (skillInfo) {
+                totalSpent += points * (skillInfo.cost || 1);
+              }
+            }
+          }
+        }
+        return totalSpent;
+      }
+
+      // --- Description Panel Logic ---
+      function updateDescriptionPanel(skillId) {
+        const skillInfo = findSkillData(skillId);
+        if (skillInfo) {
+          skillDetailName.textContent = skillInfo.name;
+          skillDetailDesc.textContent =
+            skillInfo.description || "No description available.";
+
+          const prereqText =
+            skillInfo.prerequisites && skillInfo.prerequisites.length > 0
+              ? `Requires: ${skillInfo.prerequisites
+                  .map((pId) => findSkillData(pId)?.name || pId)
+                  .join(", ")}`
+              : "Requires: None";
+          const costText = `Cost: ${skillInfo.cost || 1} point${
+            (skillInfo.cost || 1) > 1 ? "s" : ""
+          }`;
+          const maxPointsText =
+            skillInfo.maxPoints > 1 ? `Max Points: ${skillInfo.maxPoints}` : "";
+
+          skillDetailReqs.innerHTML = `
+                                 <p>${costText}</p>
+                                 ${
+                                   maxPointsText
+                                     ? `<p>${maxPointsText}</p>`
+                                     : ""
+                                 }
+                                 <p>${prereqText}</p>
+                             `;
+          descriptionPanel.classList.add("visible");
+        } else {
+          skillDetailName.textContent = "Select a skill";
+          skillDetailDesc.textContent =
+            "Skill details will appear here when you click a node in the tree.";
+          skillDetailReqs.innerHTML = "";
+          descriptionPanel.classList.remove("visible");
+        }
+      }
+
+      // --- Visual Update Logic ---
+      function updateSkillNodeVisuals(skillId, treeId) {
+        const skill = skillTreeData[treeId]?.find((s) => s.id === skillId);
+        const node = document.getElementById(`skill-${skillId}`);
+        if (!skill || !node) return;
+
+        const pointsDisplay = node.querySelector(".skill-points-display");
+        const currentPoints = allocatedSkills[treeId]?.[skillId] || 0;
+        const prereqsMet = checkPrerequisites(skillId);
+        const currentTotalSpent = calculateTotalSpentPoints();
+        const canAfford =
+          totalSkillPoints - currentTotalSpent >= (skill.cost || 1);
+        const maxReached = currentPoints >= (skill.maxPoints || 1);
+
+        // Reset classes
+        node.classList.remove(
+          "available",
+          "allocated",
+          "maxed",
+          "unavailable",
+          "single-point"
+        );
+        if (node.id !== `skill-${selectedSkillId}`) {
+          node.classList.remove("selected");
+        } else {
+          node.classList.add("selected");
+        }
+
+        // Add rhombus class if skill is single-point
+        if (skill.maxPoints === 1) {
+          node.classList.add("single-point");
+        }
+
+        // Determine state and apply classes
+        if (maxReached) {
+          node.classList.add("maxed");
+          if (currentPoints > 0) node.classList.add("allocated");
+        } else if (currentPoints > 0) {
+          node.classList.add("allocated");
+          if (prereqsMet && canAfford) {
+            node.classList.add("available");
+          } else {
+            node.classList.add("unavailable");
+          }
+        } else {
+          // currentPoints === 0
+          if (prereqsMet && canAfford) {
+            node.classList.add("available");
+          } else {
+            node.classList.add("unavailable");
+          }
+        }
+
+        // Update points display text and visibility
+        if (skill.maxPoints > 1) {
+          // CIRCLE nodes (multi-point)
+          pointsDisplay.textContent = `${currentPoints}/${skill.maxPoints}`;
+          pointsDisplay.style.display = "block";
+        } else {
+          // RHOMBUS nodes (single-point)
+          pointsDisplay.textContent = currentPoints > 0 ? `✓` : `0/1`;
+          pointsDisplay.style.display = "block";
+        }
+      }
+
+      function updateAllVisuals() {
+        if (!skillTreeData[currentTreeId]) return;
+        skillTreeData[currentTreeId].forEach((skill) =>
+          updateSkillNodeVisuals(skill.id, currentTreeId)
+        );
+        updateConnectingLines(currentTreeId);
+      }
+
+      // Update only remaining points display
+      function updatePointDisplays() {
+        totalSkillPoints = calculateTotalPoints(currentLevel);
+        spentSkillPoints = calculateTotalSpentPoints();
+        remainingPointsDisplay.textContent =
+          totalSkillPoints - spentSkillPoints; // Update remaining points
+        updateAllVisuals(); // Update skill availability based on points
+      }
+
+      // --- Interaction Logic ---
+      function handleSkillClick(skillId, treeId) {
+        const skillInfo = findSkillData(skillId);
+        if (!skillInfo || skillInfo.treeId !== treeId) return;
+
+        const skill = skillInfo;
+        const node = document.getElementById(`skill-${skillId}`);
+
+        // --- Selection Logic ---
+        if (selectedSkillId && selectedSkillId !== skillId) {
+          const previousNode = document.getElementById(
+            `skill-${selectedSkillId}`
+          );
+          if (previousNode) previousNode.classList.remove("selected");
+        }
+        if (selectedSkillId !== skillId) {
+          selectedSkillId = skillId;
+          node.classList.add("selected");
+          updateDescriptionPanel(skillId);
+        } else {
+          selectedSkillId = null;
+          node.classList.remove("selected");
+          updateDescriptionPanel(null);
+        }
+
+        // --- Allocation Logic ---
+        const currentPoints = allocatedSkills[treeId]?.[skillId] || 0;
+        const prereqsMet = checkPrerequisites(skillId);
+        const currentTotalSpent = calculateTotalSpentPoints();
+        const canAfford =
+          totalSkillPoints - currentTotalSpent >= (skill.cost || 1);
+        const maxReached = currentPoints >= (skill.maxPoints || 1);
+
+        if (!maxReached && prereqsMet && canAfford) {
+          if (!allocatedSkills[treeId]) allocatedSkills[treeId] = {};
+          allocatedSkills[treeId][skillId] =
+            (allocatedSkills[treeId][skillId] || 0) + 1;
+          updatePointDisplays();
+        } else if (!prereqsMet && currentPoints === 0) {
+          console.warn(`Prerequisites not met for ${skill.name}`);
+        } else if (!canAfford && currentPoints < (skill.maxPoints || 1)) {
+          console.warn(
+            `Not enough points to learn/upgrade ${skill.name}. Cost: ${
+              skill.cost || 1
+            }, Remaining: ${totalSkillPoints - currentTotalSpent}`
+          );
+        }
+      }
+
+      function handleSkillRightClick(event, skillId, treeId) {
+        event.preventDefault();
+        const skillInfo = findSkillData(skillId);
+        if (!skillInfo || skillInfo.treeId !== treeId) return;
+
+        const skill = skillInfo;
+        const currentPoints = allocatedSkills[treeId]?.[skillId];
+
+        if (!currentPoints || currentPoints <= 0) return;
+
+        const isPrerequisiteForOthers = Object.keys(skillTreeData).some(
+          (checkTreeId) => {
+            return skillTreeData[checkTreeId].some((otherSkill) => {
+              const isOtherAllocated =
+                (allocatedSkills[checkTreeId]?.[otherSkill.id] || 0) > 0;
+              return (
+                isOtherAllocated &&
+                otherSkill.prerequisites &&
+                otherSkill.prerequisites.includes(skillId)
+              );
+            });
+          }
+        );
+
+        if (isPrerequisiteForOthers) {
+          alert(
+            `Cannot de-allocate "${skill.name}" because other learned skills depend on it.`
+          );
+          return;
+        }
+
+        allocatedSkills[treeId][skillId]--;
+        if (allocatedSkills[treeId][skillId] <= 0) {
+          delete allocatedSkills[treeId][skillId];
+          if (selectedSkillId === skillId) {
+            selectedSkillId = null;
+            updateDescriptionPanel(null);
+            const node = document.getElementById(`skill-${skillId}`);
+            if (node) node.classList.remove("selected");
+          }
+        }
+        updatePointDisplays();
+      }
+
+      // --- DOM Creation and Line Drawing ---
+      function createSkillTreeDOM(treeId) {
+        skillTreeContainer.innerHTML = "";
+        const skills = skillTreeData[treeId];
+        if (!skills || skills.length === 0) {
+          skillTreeContainer.innerHTML =
+            '<p class="text-gray-400">No skills defined.</p>';
+          skillTreeContainer.style.gridTemplateColumns = "1fr";
+          generateColumnHeaders(treeId);
+          return;
+        }
+
+        let maxRow = 0;
+        let maxCol = 0;
+        skills.forEach((skill) => {
+          if (skill.position) {
+            maxRow = Math.max(maxRow, skill.position.row);
+            maxCol = Math.max(maxCol, skill.position.col);
+          }
+        });
+        // Ensure number of columns is at least 4 for Dual Wield, or based on maxCol otherwise
+        const numCols =
+          treeId === "Dual Wield"
+            ? Math.max(4, maxCol + 1)
+            : Math.max(maxCol + 1, 1);
+        skillTreeContainer.style.gridTemplateColumns = `repeat(${numCols}, minmax(0, 1fr))`;
+
+        generateColumnHeaders(treeId);
+        // Pass numCols to header generation
+
+        skills.forEach((skill) => {
+          const node = document.createElement("div");
+          node.id = `skill-${skill.id}`;
+          node.className = "skill-node unavailable"; // Base class
+
+          // Add rhombus class if skill is single-point
+          if (skill.maxPoints === 1) {
+            node.classList.add("single-point");
+          }
+
+          if (
+            skill.position &&
+            typeof skill.position.row === "number" &&
+            typeof skill.position.col === "number"
+          ) {
+            node.style.gridRow = skill.position.row;
+            node.style.gridColumn = skill.position.col + 1;
+          } else {
+            console.warn(`Skill ${skill.id} missing position. Skipping.`);
+            return;
+          }
+
+          const iconSpan = document.createElement("span");
+          iconSpan.className = "skill-node-icon";
+          iconSpan.textContent = skill.icon || skill.id;
+          node.appendChild(iconSpan);
+
+          const tooltip = document.createElement("div");
+          tooltip.className = "skill-tooltip";
+          tooltip.textContent = skill.name;
+          node.appendChild(tooltip);
+
+          const pointsDisplay = document.createElement("div");
+          pointsDisplay.className = "skill-points-display";
+          pointsDisplay.textContent = `0/${skill.maxPoints || 1}`;
+          node.appendChild(pointsDisplay);
+
+          node.addEventListener("click", () =>
+            handleSkillClick(skill.id, treeId)
+          );
+          node.addEventListener("contextmenu", (event) =>
+            handleSkillRightClick(event, skill.id, treeId)
+          );
+
+          skillTreeContainer.appendChild(node);
+        });
+
+        drawConnectingLines(treeId);
+        updateAllVisuals();
+      }
+
+      function drawConnectingLines(treeId) {
+        skillTreeContainer
+          .querySelectorAll(".line")
+          .forEach((line) => line.remove());
+        const skills = skillTreeData[treeId];
+        if (!skills) return;
+
+        skills.forEach((skill) => {
+          const toNode = document.getElementById(`skill-${skill.id}`);
+          if (
+            !toNode ||
+            !skill.prerequisites ||
+            skill.prerequisites.length === 0
+          )
+            return;
+
+          const toRect = toNode.getBoundingClientRect();
+          const containerRect = skillTreeContainer.getBoundingClientRect();
+          const toX = toRect.left + toRect.width / 2 - containerRect.left;
+          const toY = toRect.top + toRect.height / 2 - containerRect.top;
+
+          skill.prerequisites.forEach((prereqId) => {
+            const fromNode = document.getElementById(`skill-${prereqId}`);
+            if (!fromNode) return; // Only draw if 'from' node is in current tree DOM
+
+            const fromRect = fromNode.getBoundingClientRect();
+            const fromX =
+              fromRect.left + fromRect.width / 2 - containerRect.left;
+            const fromY =
+              fromRect.top + fromRect.height / 2 - containerRect.top;
+
+            const line = document.createElement("div");
+            line.classList.add("line");
+            line.dataset.from = prereqId;
+            line.dataset.to = skill.id;
+
+            const dx = toX - fromX;
+            const dy = toY - fromY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+            const nodeRadius = toRect.width / 2;
+            const startOffsetX = Math.cos((angle * Math.PI) / 180) * nodeRadius;
+            const startOffsetY = Math.sin((angle * Math.PI) / 180) * nodeRadius;
+            const adjustedDistance = distance - nodeRadius * 1.8;
+            const adjustedFromX = fromX + startOffsetX;
+            const adjustedFromY = fromY + startOffsetY;
+
+            line.style.width = `${Math.max(0, adjustedDistance)}px`;
+            line.style.height = "2px";
+            line.style.position = "absolute";
+            line.style.top = `${adjustedFromY - 1}px`;
+            line.style.left = `${adjustedFromX}px`;
+            line.style.transformOrigin = "0 0";
+            line.style.transform = `rotate(${angle}deg)`;
+            line.style.zIndex = "-1";
+
+            let prereqMet = false;
+            for (const tId in allocatedSkills) {
+              if ((allocatedSkills[tId][prereqId] || 0) > 0) {
+                prereqMet = true;
+                break;
+              }
+            }
+            if (prereqMet) line.classList.add("active");
+            else line.classList.remove("active");
+
+            skillTreeContainer.appendChild(line);
+          });
+        });
+      }
+
+      function updateConnectingLines(treeId) {
+        if (!skillTreeData[treeId]) return;
+        skillTreeContainer.querySelectorAll(".line").forEach((line) => {
+          const fromSkillId = line.dataset.from;
+          let prereqMet = false;
+          if (fromSkillId) {
+            for (const tId in allocatedSkills) {
+              if ((allocatedSkills[tId][fromSkillId] || 0) > 0) {
+                prereqMet = true;
+                break;
+              }
+            }
+          }
+          if (prereqMet) line.classList.add("active");
+          else line.classList.remove("active");
+        });
+      }
+
+      // --- Tree Switching and Reset ---
+      function resetSkillTree() {
+        initializeAllocatedSkills();
+        updatePointDisplays();
+        skillTreeContainer
+          .querySelectorAll(".skill-node.selected")
+          .forEach((n) => n.classList.remove("selected"));
+      }
+
+      function switchTree(treeId) {
+        if (!skillTreeData[treeId]) return;
+        currentTreeId = treeId;
+        selectedSkillId = null;
+        updateDescriptionPanel(null);
+
+        treeTabsContainer.querySelectorAll(".tree-tab").forEach((tab) => {
+          tab.classList.toggle("active", tab.dataset.treeId === treeId);
+        });
+
+        createSkillTreeDOM(treeId); // Rebuild DOM (also calls generateColumnHeaders)
+        generateLevelMarkers(treeId); // Regenerate level markers
+      }
+
+      // --- Level Marker Generation ---
+      function generateLevelMarkers(treeId) {
+        levelMarkersContainer.innerHTML = "";
+        const skills = skillTreeData[treeId];
+        if (!skills) return;
+        const rows = [
+          ...new Set(
+            skills.map((s) => s.position?.row).filter((r) => r !== undefined)
+          ),
+        ].sort((a, b) => a - b);
+        if (rows.length === 0) return;
+        const levelMap = {
+          2: "Lv 2",
+          3: "Lv 10",
+          4: "Lv 18",
+          5: "Lv 26",
+          6: "Lv 34",
+        };
+        let lastMarkerRow = 0;
+        rows.forEach((row) => {
+          if (levelMap[row]) {
+            const marker = document.createElement("div");
+            marker.className = "level-marker";
+            marker.textContent = levelMap[row];
+            levelMarkersContainer.appendChild(marker);
+            lastMarkerRow = row;
+          }
+        });
+      }
+
+      function generateColumnHeaders(treeId) {
+        columnHeadersContainer.innerHTML = "";
+        const skills = skillTreeData[treeId];
+        if (!skills || skills.length === 0) return;
+
+        // Build a map of column index to title
+        const columns = {};
+        skills.forEach((skill) => {
+          if (
+            skill.position &&
+            typeof skill.position.col === "number" &&
+            skill.columnTitle
+          ) {
+            columns[skill.position.col] = skill.columnTitle;
+          }
+        });
+
+        const maxColIndex = Math.max(...Object.keys(columns).map(Number), 0);
+        columnHeadersContainer.style.gridTemplateColumns = `repeat(${
+          maxColIndex + 1
+        }, minmax(0, 1fr))`;
+
+        // Merge consecutive columns with the same title
+        let i = 0;
+        while (i <= maxColIndex) {
+          const title = columns[i] || "";
+          let span = 1;
+
+          // Count how many consecutive columns share this same title
+          while (columns[i + span] === title) {
+            span++;
+          }
+
+          const header = document.createElement("div");
+          header.className = "column-header";
+          header.textContent = title;
+          header.style.gridColumn = `${i + 1} / span ${span}`;
+          columnHeadersContainer.appendChild(header);
+
+          i += span;
+        }
+      }
+
+      // --- Initialization ---
+      function initializeApp() {
+        createTreeTabs(); // Create tabs based on skillTreeData order
+        initializeAllocatedSkills();
+
+        levelInput.addEventListener("input", (e) => {
+          let newLevel = parseInt(e.target.value, 10);
+          const minLevel = parseInt(levelInput.min, 10) || 1;
+          const maxLevel = parseInt(levelInput.max, 10) || 60;
+          if (isNaN(newLevel)) newLevel = minLevel;
+          newLevel = Math.max(minLevel, Math.min(newLevel, maxLevel));
+          e.target.value = newLevel;
+          currentLevel = newLevel;
+          updatePointDisplays();
+        });
+
+        resetButton.addEventListener("click", resetSkillTree);
+
+        // Keyboard Navigation for Tabs
+        document.addEventListener("keydown", (e) => {
+          // Ignore if typing in the input field
+          if (e.target === levelInput) return;
+
+          const currentTabIndex = tabOrder.indexOf(currentTreeId);
+          let nextTabIndex = -1;
+
+          if (e.key.toLowerCase() === "q") {
+            // Previous tab
+            nextTabIndex =
+              (currentTabIndex - 1 + tabOrder.length) % tabOrder.length;
+          } else if (e.key.toLowerCase() === "e") {
+            // Next tab
+            nextTabIndex = (currentTabIndex + 1) % tabOrder.length;
+          }
+
+          if (nextTabIndex !== -1 && nextTabIndex < tabOrder.length) {
+            const nextTreeId = tabOrder[nextTabIndex];
+            // Ensure the nextTreeId actually exists in skillTreeData before switching
+            if (skillTreeData.hasOwnProperty(nextTreeId)) {
+              switchTree(nextTreeId);
+            }
+          }
+        });
+
+        // Set default tree (will be the first key in skillTreeData, now "Dual Wield")
+        const firstTreeId = Object.keys(skillTreeData)[0] || null;
+        if (firstTreeId) {
+          currentTreeId = firstTreeId;
+          switchTree(firstTreeId);
+        } else {
+          skillTreeContainer.innerHTML =
+            '<p class="text-gray-400">No skill trees defined.</p>';
+          levelMarkersContainer.innerHTML = "";
+          columnHeadersContainer.innerHTML = "";
+        }
+        updatePointDisplays(); // Initial calculation
+
+        let resizeTimeout;
+        window.addEventListener("resize", () => {
+          clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(() => {
+            if (currentTreeId) drawConnectingLines(currentTreeId);
+          }, 150);
+        });
+      }
+
+      function createTreeTabs() {
+        treeTabsContainer.innerHTML = "";
+        // Use the globally defined tabOrder
+        const validOrder = tabOrder.filter((key) =>
+          skillTreeData.hasOwnProperty(key)
+        );
+
+        validOrder.forEach((treeId) => {
+          const tab = document.createElement("button");
+          tab.className = "tree-tab";
+          tab.textContent = treeId;
+          tab.dataset.treeId = treeId;
+          tab.addEventListener("click", () => switchTree(treeId));
+          treeTabsContainer.appendChild(tab);
+        });
+      }
+
+      // --- Run Initialization ---
+      initializeApp();
+    </script>
+  </body>
+</html>

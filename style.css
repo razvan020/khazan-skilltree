@@ -1,0 +1,986 @@
+/* --- Keep previous body styles --- */
+body {
+    background-color: #101214;
+    color: #a0a0a0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center; /* Center the container if it's not full width */
+    align-items: flex-start;
+    padding: 50px 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* Stack nav and container */
+    align-items: center; /* Center items horizontally */
+    padding: 20px; /* Adjust overall padding */
+}
+
+/* Custom cursor styling to match the skill node design */
+body {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="%23aaaaaa" stroke-width="2" opacity="0.8"/><circle cx="16" cy="16" r="3" fill="%23ffffff" opacity="0.8"/></svg>') 16 16, auto;
+  }
+  
+  /* Different cursor for clickable elements */
+  .skill-node:not(.locked):not(.path-locked),
+  button,
+  .tab-item,
+  a {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="%236a8caf" stroke-width="2" opacity="0.9"/><circle cx="16" cy="16" r="4" fill="%238aacdf" opacity="0.8"/></svg>') 16 16, pointer;
+  }
+  
+  /* For locked nodes, show a different cursor */
+  .skill-node.locked,
+  .skill-node.path-locked {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="%23772222" stroke-width="2" opacity="0.8"/><path d="M22 10 L10 22 M10 10 L22 22" stroke="%23772222" stroke-width="2"/></svg>') 16 16, not-allowed;
+  }
+  
+  /* For when a node is active/selected */
+  .skill-node.highlighted {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="%23ffffff" stroke-width="3" opacity="1"/><circle cx="16" cy="16" r="5" fill="%23ffffff" opacity="0.6"/></svg>') 16 16, pointer;
+  }
+  
+  /* Alternative option - using a "follow circle" cursor that follows the mouse */
+  .cursor-follower {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(170, 170, 170, 0.7);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(1px);
+    transition: width 0.2s, height 0.2s, border-color 0.2s;
+  }
+  
+  .cursor-follower.active {
+    width: 40px;
+    height: 40px;
+    border-color: rgba(170, 200, 255, 0.9);
+    box-shadow: 0 0 15px rgba(170, 200, 255, 0.4);
+  }
+
+/* Tab Navigation Bar */
+.skill-tabs {
+    display: flex;
+    justify-content: center;
+    background-color: #1a1a1a;
+    padding: 10px 0;
+    margin-bottom: 20px; /* Space between tabs and tree container */
+    border-radius: 4px;
+    width: fit-content; /* Size to content */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+.tab-item {
+    padding: 10px 25px;
+    color: #888;
+    cursor: pointer;
+    font-weight: 600;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    border-radius: 4px; /* Optional rounded corners */
+    margin: 0 5px; /* Spacing between tabs */
+}
+
+.tab-item:hover {
+    color: #ccc;
+    background-color: #2a2a2a; /* Slight background on hover */
+}
+
+.tab-item.active {
+    color: #eee;
+    background-color: #3a3a3a; /* Background for active tab */
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+}
+
+.skill-tree-content {
+    display: none;
+    position: relative;
+    width: 100%;
+  }
+  
+  .skill-tree-content.active {
+    display: block;
+  }
+  
+  /* This fixes the SVG line container positioning */
+  .skill-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: visible;
+  }
+
+.skill-tree-container {
+    position: relative;
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    width: fit-content; /* Let container size to content */
+    /* OR specify a large width and overflow: auto; */
+    /* width: 1600px; */
+    /* overflow-x: auto; */
+    min-height: 700px; /* Adjusted height */
+}
+
+/* Container for the columns */
+.skill-columns-container {
+    display: flex; /* Arrange column wrappers horizontally */
+    gap: 50px; /* Space between columns */
+    position: relative;
+    z-index: 2;
+    padding: 40px 20px 20px 20px; /* Add top padding for titles */
+    width: fit-content; /* Fit to content */
+}
+
+/* Wrapper for Title + Column Grid */
+.column-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Style for Column Titles */
+.column-title {
+    color: #ccc;
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-bottom: 25px; /* Space between title and grid */
+    text-align: center;
+    width: 100%; /* Span width of column */
+    position: sticky; /* Optional: make titles stick */
+    background-color: #1e1e1e; /* Match container bg */
+    z-index: 3; /* Above lines */
+    padding-bottom: 5px;
+    letter-spacing: 0.5px;
+}
+
+.column-title::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%; /* Width of the underline */
+    height: 3px;
+    background: linear-gradient(to right, transparent, #888, transparent);
+  }
+  
+  /* Style for active column title (optional) */
+  .active-column .column-title {
+    color: #eee; /* Slightly brighter color for active column */
+  }
+  
+  .active-column .column-title::after {
+    background: linear-gradient(to right, transparent, #aaa, transparent);
+    height: 2px; /* Thicker underline for active column */
+  }
+
+/* Individual Skill Column - Uses CSS Grid */
+.skill-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: repeat(4, 120px);
+    gap: 25px 15px; /* Increased row gap slightly */
+    width: 240px; /* Slightly wider column */
+    justify-items: center;
+    align-items: center;
+    position: relative;
+}
+
+/* --- Keep Grid Placement Classes (.node-a to .node-h) --- */
+.node-a { grid-row: 1; grid-column: 2; }
+.node-b { grid-row: 2; grid-column: 1; }
+.node-c { grid-row: 2; grid-column: 3; }
+.node-d { grid-row: 3; grid-column: 1; }
+.node-e { grid-row: 3; grid-column: 3; }
+.node-f { grid-row: 4; grid-column: 1; }
+.node-g { grid-row: 4; grid-column: 2; }
+.node-h { grid-row: 4; grid-column: 3; }
+
+
+/* --- Keep Skill Node Base Styling --- */
+.skill-node {
+    width: 65px;
+    height: 65px;
+    border: 2px solid #454545;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s;
+    text-align: center;
+    box-sizing: border-box;
+    background-color: #282828;
+    color: #ccc;
+    font-size: 18px;
+    font-weight: bold;
+    position: relative;
+}
+
+/* --- Keep Node States (.locked, .available, etc.) --- */
+.skill-node.locked { border-color: #383838; background-color: #202020; color:#555; cursor: not-allowed; opacity: 0.6; }
+.skill-node.available { border-color: #777; background-color: #303030; opacity: 1.0; }
+.skill-node.available:hover { border-color: #ccc; background-color: #383838; box-shadow: 0 0 8px rgba(200, 200, 200, 0.3); }
+.skill-node.invested { border-color: #6a8caf; background-color: #35404a; opacity: 1.0; color: #fff;}
+.skill-node.maxed { border-color: #a1b36e; background-color: #4a5235; opacity: 1.0; box-shadow: 0 0 10px rgba(161, 179, 110, 0.4); color: #fff; }
+.skill-node.highlighted { border-width: 3px; border-color: #d0d0d0; box-shadow: 0 0 15px rgba(210, 210, 210, 0.5); }
+
+/* Add new style for path-locked nodes */
+.skill-node.path-locked {
+    border-color: #440000; /* Dark red border */
+    background-color: #301212; /* Dark red background */
+    color: #777; /* Dimmed text */
+    opacity: 0.6;
+    cursor: not-allowed;
+    position: relative;
+  }
+  
+  /* X overlay for path-locked nodes */
+  .skill-node.path-locked::before {
+    content: "✕";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.8em;
+    color: #771111;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+/* --- Keep SVG Lines styling --- */
+.skill-lines { position: absolute; top: 1; left: 1; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: visible; }
+.skill-lines line { stroke: #505050; stroke-width: 2; transition: stroke 0.3s ease; }
+.skill-lines line.active { stroke: #aaa; }
+
+/* --- Keep Skill Points Display styling --- */
+.skill-points { position: absolute; bottom: 20px; right: 30px; font-size: 1.1em; color: #eee; background-color: rgba(0,0,0,0.6); padding: 8px 15px; border-radius: 4px; z-index: 3; }
+
+/* --- Keep all previous CSS rules --- */
+
+/* Specific Grid Layout for Frenzy Column (Column 3) */
+#column-3 {
+    /* Override the standard column grid */
+    display: grid;
+    /* 5 rows, 3 columns */
+    grid-template-rows: repeat(5, 100px); /* Adjust row height as needed */
+    grid-template-columns: 1fr 1fr 1fr; /* 3 equal columns */
+    gap: 20px 15px; /* Row gap, Column gap */
+    width: 260px; /* May need slight width adjustment */
+    justify-items: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Specific Node Placements within Frenzy Column (Column 3) */
+/* Using IDs for specific placement */
+#column-3 {
+    display: grid;
+    grid-template-rows: repeat(5, 100px);
+    grid-template-columns: 1fr 1fr 1fr; /* 3 equal columns */
+    gap: 20px 15px;
+    width: 260px;
+    justify-items: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Specific Node Placements within Frenzy Column (Column 3) */
+
+/* --- CORRECTED/CONFIRMED RULES for A and B --- */
+/* Place A in Row 1, Column 2 (Center) */
+#column-3 #c3-a {
+    grid-row: 1;
+    grid-column: 2; /* Column 2 of 3 */
+    justify-self: center; /* Center within the cell */
+    margin: 0; /* Remove any stray margins */
+ }
+/* Place B in Row 1, Column 3 (Right) */
+#column-3 #c3-b {
+    grid-row: 1;
+    grid-column: 3; /* Column 3 of 3 */
+    justify-self: center; /* Center within the cell */
+    margin: 0; /* Remove any stray margins */
+}
+/* --- END CORRECTED/CONFIRMED RULES --- */
+
+/* Rules for C through L remain the same */
+#column-3 #c3-c { grid-row: 2; grid-column: 1; }
+#column-3 #c3-d { grid-row: 2; grid-column: 2; }
+#column-3 #c3-e { grid-row: 2; grid-column: 3; }
+#column-3 #c3-f { grid-row: 3; grid-column: 2; }
+#column-3 #c3-g { grid-row: 4; grid-column: 1; }
+#column-3 #c3-h { grid-row: 4; grid-column: 2; }
+#column-3 #c3-i { grid-row: 4; grid-column: 3; }
+#column-3 #c3-j { grid-row: 5; grid-column: 1; }
+#column-3 #c3-k { grid-row: 5; grid-column: 2; }
+#column-3 #c3-l { grid-row: 5; grid-column: 3; }
+
+#column-4 {
+    /* Override the standard column grid */
+    display: grid;
+    /* 6 rows with increased spacing */
+    grid-template-rows: 85px 100px 140px 100px 115px 140px; /* Increased row heights */
+    grid-template-columns: 1fr 1fr 1fr 1fr; /* Keep 4 equal columns */
+    gap: 25px 20px; /* Increased both row and column gap */
+    width: 340px; /* Slightly increased width */
+    justify-items: center;
+    align-items: center;
+    position: relative;
+    margin-top: 10px;
+  }
+
+/* Specific Node Placements within Penetrate Column (Column 4) */
+#column-4 #c4-a { grid-row: 1; grid-column: 1; }
+#column-4 #c4-b { grid-row: 1; grid-column: 2; }
+#column-4 #c4-c { grid-row: 1; grid-column: 3; }
+#column-4 #c4-d { grid-row: 2; grid-column: 1; }
+#column-4 #c4-e { grid-row: 2; grid-column: 2; }
+#column-4 #c4-f { grid-row: 2; grid-column: 3; }
+
+/* --- UPDATED RULES for G and N --- */
+#column-4 #c4-g { grid-row: 3; grid-column: 4; } /* Moved G to Col 3 */
+#column-4 #c4-n { grid-row: 6; grid-column: 1; margin-top: -100px;} /* Moved N to Col 1 */
+/* --- END UPDATED RULES --- */
+
+#column-4 #c4-h { grid-row: 4; grid-column: 1; }
+#column-4 #c4-i { grid-row: 4; grid-column: 2; }
+#column-4 #c4-j { grid-row: 4; grid-column: 3; }
+#column-4 #c4-k { grid-row: 4; grid-column: 5; margin-left: -10px; }
+#column-4 #c4-l { grid-row: 5; grid-column: 2; }
+#column-4 #c4-m { grid-row: 5; grid-column: 4; }
+
+
+#column-4 .skill-node {
+    /* Inherits base styles */
+}
+
+#column-5 {
+    /* Override the standard column grid if it existed, or define new */
+    display: grid;
+    /* 6 rows, 3 columns */
+    grid-template-rows: repeat(6, 90px); /* Adjust row height as needed */
+    grid-template-columns: 1fr 1fr 1fr; /* 3 equal columns */
+    gap: 15px 15px; /* Row gap, Column gap */
+    width: 250px; /* Adjust width as needed */
+    justify-items: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Specific Node Placements within Guard Column (Column 5) */
+/* Using IDs for specific placement */
+#column-5 #c5-a { grid-row: 1; grid-column: 2; } /* Row 1, Center */
+#column-5 #c5-b { grid-row: 2; grid-column: 1; } /* Row 2, Left */
+#column-5 #c5-c { grid-row: 2; grid-column: 2; } /* Row 2, Right */
+#column-5 #c5-d { grid-row: 3; grid-column: 1; } /* Row 3, Left */
+#column-5 #c5-e { grid-row: 3; grid-column: 3; } /* Row 3, Right */
+#column-5 #c5-f { grid-row: 4; grid-column: 1; } /* Row 4, Center */
+#column-5 #c5-g { grid-row: 5; grid-column: 1; } /* Row 5, Left */
+#column-5 #c5-h { grid-row: 5; grid-column: 3; } /* Row 5, Right */
+#column-5 #c5-i { grid-row: 6; grid-column: 3; } /* Row 6, Right */
+
+
+/* Ensure base skill-node styles still apply */
+#column-5 .skill-node {
+    /* Inherits base styles */
+}
+
+
+
+.instructions {
+    background-color: #2a2a2a;
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin-bottom: 25px;
+    border: 1px solid #444;
+    max-width: 600px; /* Adjust as needed */
+    text-align: center;
+}
+
+.instructions h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #ddd;
+    font-size: 1.2em;
+}
+
+.instructions p {
+    margin: 0;
+    line-height: 1.6;
+    color: #bbb;
+}
+
+
+/* Styling for Tab Item Wrapper and Key Hints */
+.tab-item-wrapper {
+    display: flex;
+    align-items: center; /* Vertically align hint and tab */
+    margin: 0 5px; /* Spacing between wrappers */
+}
+
+.nav-key-hint {
+    color: #777;
+    font-size: 0.8em;
+    margin: 0 8px; /* Space around the hint */
+    font-weight: normal;
+}
+
+/* Adjust existing tab item styles if needed */
+.tab-item {
+    padding: 10px 20px; /* Slightly reduced padding maybe */
+    /* Keep other .tab-item styles */
+}
+
+/* Adjust active state if it looks weird with the wrapper */
+.tab-item.active {
+   /* Keep existing active styles */
+   /* Maybe add a border to the wrapper instead? */
+}
+
+/* Style for inactive lines (optional) */
+.skill-lines line.inactive {
+    stroke: #404040; /* Darker grey for inactive lines */
+    stroke-dasharray: 3, 3; /* Optional: make inactive lines dashed */
+}
+.skill-lines line.active {
+    stroke: #aaa; /* Keep active line style */
+}
+
+/* Fix rhombus shape with visible text */
+#c1-a, #c1-d, #c1-e, #c1-f, #c1-h,
+#c2-a, #c2-d, #c2-e, #c2-f, #c2-h,
+#c3-a, #c3-d, #c3-g, #c3-h, #c3-i, #c3-j, #c3-k, #c3-l,
+#c4-a, #c4-b, #c4-c, #c4-d, #c4-f, #c4-h, #c4-i, #c4-j, #c4-l, #c4-g,
+#c5-a, #c5-b, #c5-f, #c5-g, #c5-h, #c5-i {
+  /* Change to rhombus shape */
+  border-radius: 0; /* Remove the circular border */
+  transform: rotate(45deg); /* Rotate to create rhombus shape */
+  width: 50px; /* Even smaller width */
+  height: 50px; /* Even smaller height */
+  position: relative; /* Ensure position context for absolute positioning */
+  font-size: 0; /* Hide original text */
+}
+
+/* Remove the previous ineffective text handling */
+#c1-a::before, #c1-d::before, #c1-e::before, #c1-f::before, #c1-h::before,
+#c2-a::before, #c2-d::before, #c2-e::before, #c2-f::before, #c2-h::before,
+#c3-a::before, #c3-d::before, #c3-g::before, #c3-h::before, #c3-i::before, #c3-j::before, #c3-k::before, #c3-l::before,
+#c4-a::before, #c4-b::before, #c4-c::before, #c4-d::before, #c4-f::before, #c4-h::before, #c4-i::before, #c4-j::before, #c4-l::before, #c4-g::before,
+#c5-a::before, #c5-b::before, #c5-f::before, #c5-g::before, #c5-h::before, #c5-i::before {
+  content: none;
+}
+
+/* More robust approach for overlaid text */
+#c1-a::after, #c1-d::after, #c1-e::after, #c1-f::after, #c1-h::after,
+#c2-a::after, #c2-d::after, #c2-e::after, #c2-f::after, #c2-h::after,
+#c3-a::after, #c3-d::after, #c3-g::after, #c3-h::after, #c3-i::after, #c3-j::after, #c3-k::after, #c3-l::after,
+#c4-a::after, #c4-b::after, #c4-c::after, #c4-d::after, #c4-f::after, #c4-h::after, #c4-i::after, #c4-j::after, #c4-l::after, #c4-g::after,
+#c5-a::after, #c5-b::after, #c5-f::after, #c5-g::after, #c5-h::after, #c5-i::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-45deg); /* Counter-rotate to keep text straight */
+  font-size: 18px; /* Explicit font size */
+  font-weight: bold;
+  color: #ccc; /* Make sure text color is visible */
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+/* Set the text content for each node */
+#c1-a::after { content: "A"; }
+#c1-d::after { content: "D"; }
+#c1-e::after { content: "E"; }
+#c1-f::after { content: "F"; }
+#c1-h::after { content: "H"; }
+
+#c2-a::after { content: "A"; }
+#c2-d::after { content: "D"; }
+#c2-e::after { content: "E"; }
+#c2-f::after { content: "F"; }
+#c2-h::after { content: "H"; }
+
+#c3-a::after { content: "A"; }
+#c3-d::after { content: "D"; }
+#c3-g::after { content: "G"; }
+#c3-h::after { content: "H"; }
+#c3-i::after { content: "I"; }
+#c3-j::after { content: "J"; }
+#c3-k::after { content: "K"; }
+#c3-l::after { content: "L"; }
+
+#c4-a::after { content: "A"; }
+#c4-b::after { content: "B"; }
+#c4-c::after { content: "C"; }
+#c4-d::after { content: "D"; }
+#c4-f::after { content: "F"; }
+#c4-h::after { content: "H"; }
+#c4-i::after { content: "I"; }
+#c4-j::after { content: "J"; }
+#c4-l::after { content: "L"; }
+#c4-g::after { content: "G"; }
+
+#c5-a::after { content: "A"; }
+#c5-b::after { content: "B"; }
+#c5-f::after { content: "F"; }
+#c5-g::after { content: "G"; }
+#c5-h::after { content: "H"; }
+#c5-i::after { content: "I"; }
+
+/* Fix the X overlay for path-locked rhombus nodes */
+.skill-node.path-locked::before {
+  z-index: 10; /* Ensure it's on top */
+  font-size: 1.8em !important; /* Force size regardless of parent */
+  transform: translate(-50%, -50%) rotate(-45deg); /* Align with the node */
+}
+
+.nav-key-hint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: #ddd;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin: 0 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+    font-family: "Consolas", monospace;
+    transition: all 0.2s ease;
+    padding-bottom: 2px; /* Slight adjustment to vertically center letter */
+    position: relative;
+  }
+  
+  /* Key shine effect */
+  .nav-key-hint::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    right: 5px;
+    height: 5px;
+    border-radius: 2px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+    pointer-events: none;
+  }
+  
+  /* When the tab is active, also highlight its key hint */
+  .tab-item.active + .nav-key-hint,
+  .nav-key-hint + .tab-item.active {
+    background-color: #3a5e7d;
+    border-color: #6a8caf;
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+  
+  /* Tab wrapper adjustments to better align with key hints */
+  .tab-item-wrapper {
+    display: flex;
+    align-items: center;
+    margin: 0 5px;
+    position: relative;
+  }
+  
+  /* Make the tabs themselves a bit more polished to match the key hints */
+  .tab-item {
+    padding: 10px 20px;
+    color: #888;
+    font-weight: 600;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+  
+  /* Improve tab hover state to match key styling */
+  .tab-item:hover {
+    color: #ddd;
+    background-color: #2a2a2a;
+  }
+  
+  /* Improve active tab styling to better complement key hints */
+  .tab-item.active {
+    color: #fff;
+    background-color: #3a5e7d;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+  }
+
+
+#reset-all-points {
+    background-color: #632d2d;
+    color: #eee;
+    border: 1px solid #773333;
+    padding: 8px 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-left: 20px;
+  }
+  
+  #reset-all-points:hover {
+    background-color: #7a3838;
+  }
+  
+  #reset-all-points:active {
+    transform: scale(0.97);
+  }
+  
+  /* Update points control layout to accommodate the reset button */
+  .points-control {
+    background-color: #1e1e1e;
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    max-width: 500px; /* Slightly wider to fit the reset button */
+    border: 1px solid #444;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  }
+  
+  .points-control label {
+    color: #ccc;
+    font-weight: bold;
+  }
+  
+  .points-controls-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  #available-points-input {
+    width: 80px;
+    background-color: #2a2a2a;
+    border: 1px solid #555;
+    color: #eee;
+    padding: 8px;
+    border-radius: 3px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    /* Hide number input arrows for Chrome, Safari, Edge, Opera */
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    /* Disable resize handle in Firefox */
+    resize: none;
+  }
+  
+  #apply-points {
+    background-color: #2d4a63;
+    color: #ddd;
+    border: 1px solid #555;
+    padding: 8px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+  }
+  
+  #apply-points:hover {
+    background-color: #3a5e7d;
+  }
+
+  #available-points-input::-webkit-inner-spin-button, 
+#available-points-input::-webkit-outer-spin-button { 
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.skill-node .point-counter {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #ccc;
+    border-radius: 3px;
+    padding: 2px 5px;
+    font-size: 12px; /* Larger font size */
+    font-weight: bold;
+    line-height: 1;
+    z-index: 5;
+    pointer-events: none;
+    border: 1px solid #555;
+  }
+  
+  /* For rhombus nodes, position the counter differently and ensure it's not rotated */
+  #c1-b .point-counter, #c1-c .point-counter, #c1-g .point-counter,
+  #c3-c .point-counter, #c3-e .point-counter, #c3-f .point-counter,
+  #c4-b .point-counter, #c4-e .point-counter, #c4-f .point-counter, #c4-j .point-counter, #c4-k .point-counter,
+  #c5-b .point-counter, #c5-e .point-counter {
+    /* Remove the -45deg rotation to keep counter straight */
+    transform: none; 
+    /* Position at the bottom right outside the node for better visibility */
+    bottom: -5px;
+    right: -5px;
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 1px solid #666;
+    padding: 3px 6px;
+    font-size: 13px; /* Even larger for better visibility */
+  }
+
+  #c4-b .point-counter, #c4-f .point-counter, #c4-j .point-counter, #c5-b .point-counter {
+    /* Adjust position for the specific node */
+    right: -30px;
+    bottom: 5px;
+    transform: rotate(-45deg); /* Move it to the right a bit more */
+  }
+  
+  /* For circular nodes, position differently since they don't have rotation */
+  .skill-node:not([class*="node-a"]):not([class*="node-b"]):not([class*="node-c"]):not([class*="node-d"]):not([class*="node-e"]):not([class*="node-f"]):not([class*="node-g"]):not([class*="node-h"]):not([class*="node-i"]) .point-counter {
+    bottom: -5px;
+    right: -5px;
+  }
+  
+  /* More visible counter for invested nodes */
+  .skill-node.invested .point-counter {
+    color: #bdf;
+    background-color: rgba(10, 30, 50, 0.9);
+    border-color: #6a8caf;
+  }
+  
+  .skill-node.maxed .point-counter {
+    color: #dfd;
+    background-color: rgba(20, 40, 20, 0.9);
+    border-color: #a1b36e;
+  }
+
+  #greatsword-tree .skill-node {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Styling for the skill icons */
+  .skill-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none; /* Allow clicks to pass through */
+  }
+  
+  /* Greatsword Column 1 - Potent Blow */
+  #gs-column-1 {
+    display: grid;
+    grid-template-rows: 85px 100px 100px 100px;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px 20px;
+    width: 220px;
+    justify-items: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  /* Greatsword Column 2 - Unbreakable */
+  #gs-column-2 {
+    display: grid;
+    grid-template-rows: 85px 100px 100px 100px 100px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px 20px;
+    width: 280px;
+    justify-items: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  /* Greatsword Column 3 - Overrun */
+  #gs-column-3 {
+    display: grid;
+    grid-template-rows: 85px 100px 100px 100px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px 20px;
+    width: 280px;
+    justify-items: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  /* Greatsword Column 4 - Guard */
+  #gs-column-4 {
+    display: grid;
+    grid-template-rows: 85px 100px 100px 100px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px 20px;
+    width: 280px;
+    justify-items: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  /* Specific Node Placements for Potent Blow Column */
+  #gs-column-1 #gs1-a { grid-row: 1; grid-column: 1; }
+  #gs-column-1 #gs1-b { grid-row: 2; grid-column: 1; }
+  #gs-column-1 #gs1-c { grid-row: 2; grid-column: 2; }
+  #gs-column-1 #gs1-d { grid-row: 3; grid-column: 1; }
+  #gs-column-1 #gs1-e { grid-row: 3; grid-column: 2; }
+  #gs-column-1 #gs1-f { grid-row: 4; grid-column: 1; }
+  #gs-column-1 #gs1-h { grid-row: 4; grid-column: 2; }
+  
+  /* Specific Node Placements for Unbreakable Column */
+  #gs-column-2 #gs2-a { grid-row: 1; grid-column: 2; }
+  #gs-column-2 #gs2-b { grid-row: 2; grid-column: 1; }
+  #gs-column-2 #gs2-c { grid-row: 2; grid-column: 3; }
+  #gs-column-2 #gs2-d { grid-row: 3; grid-column: 2; }
+  #gs-column-2 #gs2-e { grid-row: 3; grid-column: 3; }
+  #gs-column-2 #gs2-f { grid-row: 4; grid-column: 2; }
+  #gs-column-2 #gs2-g { grid-row: 4; grid-column: 3; }
+  #gs-column-2 #gs2-h { grid-row: 5; grid-column: 3; }
+  
+  /* Specific Node Placements for Overrun Column */
+  #gs-column-3 #gs3-a { grid-row: 1; grid-column: 2; }
+  #gs-column-3 #gs3-b { grid-row: 2; grid-column: 1; }
+  #gs-column-3 #gs3-c { grid-row: 2; grid-column: 2; }
+  #gs-column-3 #gs3-d { grid-row: 2; grid-column: 3; }
+  #gs-column-3 #gs3-e { grid-row: 3; grid-column: 1; }
+  #gs-column-3 #gs3-f { grid-row: 3; grid-column: 2; }
+  #gs-column-3 #gs3-g { grid-row: 4; grid-column: 1; }
+  
+  /* Specific Node Placements for Guard Column */
+  #gs-column-4 #gs4-a { grid-row: 1; grid-column: 2; }
+  #gs-column-4 #gs4-b { grid-row: 2; grid-column: 2; }
+  #gs-column-4 #gs4-c { grid-row: 3; grid-column: 2; }
+  #gs-column-4 #gs4-d { grid-row: 3; grid-column: 3; }
+  #gs-column-4 #gs4-e { grid-row: 4; grid-column: 1; }
+  #gs-column-4 #gs4-f { grid-row: 4; grid-column: 3; }
+  #gs-column-4 #gs4-g { grid-row: 5; grid-column: 1; }
+  
+  /* Custom styling for the rhombus nodes in Greatsword tree */
+  #greatsword-tree .node-a,
+  #greatsword-tree .node-d,
+  #greatsword-tree .node-e,
+  #greatsword-tree .node-f,
+  #greatsword-tree .node-g,
+  #greatsword-tree .node-h {
+    border-radius: 0;
+    transform: rotate(45deg);
+    width: 50px;
+    height: 50px;
+    position: relative;
+    font-size: 0;
+  }
+  
+  /* Set up node background appearances based on the screenshot */
+  .potent-blow-a, .unbreakable-a, .overrun-a, .guard-a { 
+    background-image: url('icon-placeholder.png');
+  }
+  
+  /* Style point counters for nodes with multiple points */
+  #greatsword-tree .skill-node[data-max-points="3"] .point-counter {
+    position: absolute;
+    top: auto;
+    right: -5px;
+    bottom: -5px;
+    background-color: rgba(0, 0, 0, 0.75);
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ccc;
+    z-index: 10;
+  }
+  
+  /* Position point counters correctly for rhombus nodes */
+  #greatsword-tree .node-b .point-counter,
+  #greatsword-tree .node-c .point-counter {
+    transform: none;
+    right: -30px;
+    bottom: 5px;
+  }
+
+  #gs-column-0 {
+    display: grid;
+    grid-template-rows: 85px 100px 100px 100px;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px 20px;
+    width: 220px;
+    justify-items: center;
+    align-items: center;
+    position: relative;
+    background-color: rgba(38, 50, 70, 0.4); /* Matching the blue background from screenshot */
+  }
+  
+  /* Specific Node Placements for Swift Attack Column */
+  #gs-column-0 #gs0-a { grid-row: 1; grid-column: 1 / span 2; justify-self: center; }
+  #gs-column-0 #gs0-b { grid-row: 2; grid-column: 1; }
+  #gs-column-0 #gs0-c { grid-row: 2; grid-column: 2; }
+  #gs-column-0 #gs0-d { grid-row: 3; grid-column: 1; }
+  #gs-column-0 #gs0-e { grid-row: 3; grid-column: 2; }
+  #gs-column-0 #gs0-f { grid-row: 4; grid-column: 1; }
+  #gs-column-0 #gs0-g { grid-row: 5; grid-column: 1; }
+  #gs-column-0 #gs0-h { grid-row: 5; grid-column: 2; }
+  
+  /* Style for the shiny glow around Swift Attack's node A as shown in the screenshot */
+  #gs0-a {
+    position: relative;
+  }
+  
+  #gs0-a::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(120, 180, 255, 0.4) 0%, rgba(70, 130, 200, 0.1) 70%, rgba(0, 0, 0, 0) 100%);
+    z-index: -1;
+    pointer-events: none;
+  }
+  
+  /* Add the new Swift Attack nodes to the multi-level counter styling */
+  #gs0-b .point-counter,
+  #gs0-c .point-counter,
+  #gs0-h .point-counter {
+    position: absolute;
+    top: auto;
+    right: -5px;
+    bottom: -5px;
+    background-color: rgba(0, 0, 0, 0.75);
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ccc;
+    z-index: 10;
+  }
+  
+  /* Add the column with blue highlight like in the screenshot */
+  #greatsword-tree #gs-column-0 {
+    position: relative;
+    overflow: visible;
+  }
+  
+  #greatsword-tree #gs-column-0::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    left: -20px;
+    right: -20px;
+    bottom: -30px;
+    background-color: rgba(38, 50, 70, 0.4);
+    z-index: -2;
+    border-radius: 5px;
+  }

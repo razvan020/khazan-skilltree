@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skill Tree - Tabs</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="instructions">
+      <h2>How to Use</h2>
+      <p>
+        <b>Left-click</b> on an available skill node to <b>invest</b> a
+        point.<br />
+        <b>Right-click</b> on an invested skill node to <b>remove</b> a
+        point.<br />
+        Use <b>'Q'</b> and <b>'E'</b> keys or click the tabs to
+        <b>navigate</b> between skill trees.
+      </p>
+    </div>
+
+    <nav class="skill-tabs">
+      <div class="tab-item-wrapper">
+        <span class="nav-key-hint">Q</span>
+        <div class="tab-item active" data-tab-id="dual-wield">Dual Wield</div>
+      </div>
+      <div class="tab-item-wrapper">
+        <div class="tab-item" data-tab-id="greatsword">Greatsword</div>
+      </div>
+      <div class="tab-item-wrapper">
+        <div class="tab-item" data-tab-id="spear">Spear</div>
+      </div>
+      <div class="tab-item-wrapper">
+        <div class="tab-item" data-tab-id="common">Common</div>
+        <span class="nav-key-hint">E</span>
+      </div>
+    </nav>
+
+    <div class="skill-tree-container">
+      <svg id="skill-lines" class="skill-lines"></svg>
+
+      <!-- Dual Wield Tree -->
+      <div class="skill-tree-content active" id="dual-wield-tree">
+        <svg class="skill-lines" id="dual-wield-lines"></svg>
+        <div class="skill-columns-container" id="dual-wield-columns">
+          <div class="column-wrapper">
+            <h2 class="column-title">Swift Attack</h2>
+            <div class="skill-column" id="column-1">
+              <div
+                class="skill-node node-a available highlighted"
+                id="c1-a"
+                data-max-points="1"
+                data-current-points="0"
+                data-children="c1-b,c1-c"
+              >
+                A
+              </div>
+              <div
+                class="skill-node node-b locked"
+                id="c1-b"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c1-a"
+                data-children="c1-d"
+              >
+                B
+              </div>
+              <div
+                class="skill-node node-c locked"
+                id="c1-c"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c1-a"
+                data-children="c1-e"
+              >
+                C
+              </div>
+              <div
+                class="skill-node node-d locked"
+                id="c1-d"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c1-b"
+                data-children="c1-f"
+              >
+                D
+              </div>
+              <div
+                class="skill-node node-e locked"
+                id="c1-e"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c1-c"
+                data-children="c1-h"
+              >
+                E
+              </div>
+              <div
+                class="skill-node node-f locked"
+                id="c1-f"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c1-d"
+                data-children="c1-g"
+              >
+                F
+              </div>
+              <div
+                class="skill-node node-g locked"
+                id="c1-g"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c1-f,c1-h"
+              >
+                G
+              </div>
+              <div
+                class="skill-node node-h locked"
+                id="c1-h"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c1-e"
+                data-children="c1-g"
+              >
+                H
+              </div>
+            </div>
+          </div>
+
+          <div class="column-wrapper">
+            <h2 class="column-title">Potent Blow</h2>
+            <div class="skill-column" id="column-2">
+              <div
+                class="skill-node node-a locked"
+                id="c2-a"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c1-g"
+                data-children="c2-b,c2-c"
+              >
+                A
+              </div>
+              <div
+                class="skill-node node-b locked"
+                id="c2-b"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c2-a"
+                data-children="c2-d"
+              >
+                B
+              </div>
+              <div
+                class="skill-node node-c locked"
+                id="c2-c"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c2-a"
+                data-children="c2-e"
+              >
+                C
+              </div>
+              <div
+                class="skill-node node-d locked"
+                id="c2-d"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c2-b"
+                data-children="c2-f"
+              >
+                D
+              </div>
+              <div
+                class="skill-node node-e locked"
+                id="c2-e"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c2-c"
+                data-children="c2-h"
+              >
+                E
+              </div>
+              <div
+                class="skill-node node-f locked"
+                id="c2-f"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c2-d"
+                data-children=""
+              >
+                F
+              </div>
+              <div
+                class="skill-node node-h locked"
+                id="c2-h"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c2-e"
+                data-children=""
+              >
+                H
+              </div>
+            </div>
+          </div>
+
+          <div class="column-wrapper">
+            <h2 class="column-title">Frenzy</h2>
+            <div class="skill-column" id="column-3">
+              <div
+                class="skill-node locked"
+                id="c3-a"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c2-f,c2-h"
+                data-children="c3-d"
+              >
+                A
+              </div>
+              <div
+                class="skill-node locked"
+                id="c3-b"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c2-f,c2-h"
+                data-children=""
+              >
+                B
+              </div>
+              <div
+                class="skill-node locked"
+                id="c3-c"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c3-b"
+                data-children="c3-g"
+              >
+                C
+              </div>
+              <div
+                class="skill-node locked"
+                id="c3-d"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c3-a"
+                data-children=""
+              >
+                D
+              </div>
+              <div
+                class="skill-node locked"
+                id="c3-e"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c3-b"
+                data-children="c3-i"
+              >
+                E
+              </div>
+              <div
+                class="skill-node locked"
+                id="c3-f"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c3-d"
+                data-children="c3-h"
+              >
+                F
+              </div>
+              <div
+                class="skill-node locked"
+                id="c3-g"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c3-c"
+                data-children="c3-j"
+              >
+                G
+              </div>
+              <div
+                class="skill-node locked"
+                id="c3-h"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c3-d"
+                data-children="c3-k"
+              >
+                H
+              </div>
+              <div
+                class="skill-node locked"
+                id="c3-i"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c3-e"
+                data-children="c3-l"
+              >
+                I
+              </div>
+              <div
+                class="skill-node locked"
+                id="c3-j"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c3-g"
+              >
+                J
+              </div>
+              <div
+                class="skill-node locked"
+                id="c3-k"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c3-f,c3-h"
+              >
+                K
+              </div>
+              <div
+                class="skill-node locked"
+                id="c3-l"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c3-i"
+              >
+                L
+              </div>
+            </div>
+          </div>
+
+          <div class="column-wrapper">
+            <h2 class="column-title">Penetrate</h2>
+            <div class="skill-column" id="column-4">
+              <div
+                class="skill-node locked"
+                id="c4-a"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c3-k"
+                data-children=""
+              >
+                A
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-b"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c3-k"
+                data-children=""
+              >
+                B
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-c"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c3-k"
+                data-children=""
+              >
+                C
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-d"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c4-a"
+                data-children="c4-h"
+              >
+                D
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-e"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c4-b,c3-k"
+                data-children="c4-i"
+              >
+                E
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-f"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c4-c"
+                data-children="c4-j"
+              >
+                F
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-g"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c4-e"
+                data-children="c4-m"
+              >
+                G
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-h"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c4-d"
+                data-children=""
+              >
+                H
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-i"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c4-e"
+                data-children="c4-l"
+              >
+                I
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-j"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c4-f"
+                data-children=""
+              >
+                J
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-k"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c4-j"
+                data-children=""
+              >
+                K
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-l"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c4-g,c4-i"
+                data-children=""
+              >
+                L
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-m"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c4-i,c4-k"
+                data-children=""
+              >
+                M
+              </div>
+              <div
+                class="skill-node locked"
+                id="c4-n"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c4-h,c4-l,c4-m"
+              >
+                N
+              </div>
+            </div>
+          </div>
+
+          <div class="column-wrapper">
+            <h2 class="column-title">Guard</h2>
+            <div class="skill-column" id="column-5">
+              <div
+                class="skill-node locked"
+                id="c5-a"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c4-m"
+                data-children="c5-c"
+              >
+                A
+              </div>
+              <div
+                class="skill-node locked"
+                id="c5-b"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c5-a"
+                data-children=""
+              >
+                B
+              </div>
+              <div
+                class="skill-node locked"
+                id="c5-c"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c5-a"
+                data-children=""
+              >
+                C
+              </div>
+              <div
+                class="skill-node locked"
+                id="c5-d"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c5-b"
+                data-children="c5-f"
+              >
+                D
+              </div>
+              <div
+                class="skill-node locked"
+                id="c5-e"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="c5-c"
+                data-children="c5-h"
+              >
+                E
+              </div>
+              <div
+                class="skill-node locked"
+                id="c5-f"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c5-d,c5-e"
+                data-children="c5-g"
+              >
+                F
+              </div>
+              <div
+                class="skill-node locked"
+                id="c5-g"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c5-f"
+                data-children=""
+              >
+                G
+              </div>
+              <div
+                class="skill-node locked"
+                id="c5-h"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c5-f"
+                data-children="c5-i"
+              >
+                H
+              </div>
+              <div
+                class="skill-node locked"
+                id="c5-i"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="c5-g,c5-h"
+                data-children=""
+              >
+                I
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Greatsword Tree -->
+      <div class="skill-tree-content" id="greatsword-tree">
+        <svg class="skill-lines" id="greatsword-lines"></svg>
+        <div class="skill-columns-container" id="greatsword-columns">
+          <div class="column-wrapper">
+            <h2 class="column-title">Swift Attack</h2>
+            <div class="skill-column" id="gs-column-0">
+              <div
+                class="skill-node node-a available"
+                id="gs0-a"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq=""
+                data-children="gs0-b,gs0-c"
+              >
+                A
+              </div>
+              <div
+                class="skill-node node-b locked"
+                id="gs0-b"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="gs0-a"
+                data-children="gs0-d"
+              >
+                B
+              </div>
+              <div
+                class="skill-node node-c locked"
+                id="gs0-c"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="gs0-a"
+                data-children="gs0-e"
+              >
+                C
+              </div>
+              <div
+                class="skill-node node-d locked"
+                id="gs0-d"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs0-b"
+                data-children="gs0-f"
+              >
+                D
+              </div>
+              <div
+                class="skill-node node-e locked"
+                id="gs0-e"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs0-c"
+                data-children=""
+              >
+                E
+              </div>
+              <div
+                class="skill-node node-f locked"
+                id="gs0-f"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs0-d"
+                data-children="gs0-g,gs0-h"
+              >
+                F
+              </div>
+              <div
+                class="skill-node node-g locked"
+                id="gs0-g"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs0-f"
+                data-children="gs1-a"
+              >
+                G
+              </div>
+              <div
+                class="skill-node node-h locked"
+                id="gs0-h"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="gs0-f"
+                data-children=""
+              >
+                H
+              </div>
+            </div>
+          </div>
+
+          <div class="column-wrapper">
+            <h2 class="column-title">Potent Blow</h2>
+            <div class="skill-column" id="gs-column-1">
+              <div
+                class="skill-node node-a locked"
+                id="gs1-a"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs0-g"
+                data-children="gs1-b,gs1-c"
+              >
+                A
+              </div>
+              <div
+                class="skill-node node-b locked"
+                id="gs1-b"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="gs1-a"
+                data-children="gs1-d"
+              >
+                B
+              </div>
+              <div
+                class="skill-node node-c locked"
+                id="gs1-c"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="gs1-a"
+                data-children="gs1-e"
+              >
+                C
+              </div>
+              <div
+                class="skill-node node-d locked"
+                id="gs1-d"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs1-b"
+                data-children="gs1-f"
+              >
+                D
+              </div>
+              <div
+                class="skill-node node-e locked"
+                id="gs1-e"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs1-c"
+                data-children="gs1-h"
+              >
+                E
+              </div>
+              <div
+                class="skill-node node-f locked"
+                id="gs1-f"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs1-d"
+              >
+                F
+              </div>
+              <div
+                class="skill-node node-h locked"
+                id="gs1-h"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs1-e"
+              >
+                H
+              </div>
+            </div>
+          </div>
+
+          <div class="column-wrapper">
+            <h2 class="column-title">Unbreakable</h2>
+            <div class="skill-column" id="gs-column-2">
+              <div
+                class="skill-node node-a locked"
+                id="gs2-a"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs1-f,gs1-h"
+                data-children="gs2-b,gs2-c"
+              >
+                A
+              </div>
+              <div
+                class="skill-node node-b locked"
+                id="gs2-b"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="gs2-a"
+              >
+                B
+              </div>
+              <div
+                class="skill-node node-c locked"
+                id="gs2-c"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="gs2-a"
+                data-children="gs2-d,gs2-e"
+              >
+                C
+              </div>
+              <div
+                class="skill-node node-d locked"
+                id="gs2-d"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs2-c"
+                data-children="gs2-f"
+              >
+                D
+              </div>
+              <div
+                class="skill-node node-e locked"
+                id="gs2-e"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs2-c"
+                data-children="gs2-g,gs2-h"
+              >
+                E
+              </div>
+              <div
+                class="skill-node node-f locked"
+                id="gs2-f"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs2-d"
+              >
+                F
+              </div>
+              <div
+                class="skill-node node-g locked"
+                id="gs2-g"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs2-e"
+              >
+                G
+              </div>
+              <div
+                class="skill-node node-h locked"
+                id="gs2-h"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs2-e"
+              >
+                H
+              </div>
+            </div>
+          </div>
+
+          <div class="column-wrapper">
+            <h2 class="column-title">Overrun</h2>
+            <div class="skill-column" id="gs-column-3">
+              <div
+                class="skill-node node-a locked"
+                id="gs3-a"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs2-f,gs2-g,gs2-h"
+                data-children="gs3-b,gs3-c,gs3-d"
+              >
+                A
+              </div>
+              <div
+                class="skill-node node-b locked"
+                id="gs3-b"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="gs3-a"
+                data-children="gs3-e"
+              >
+                B
+              </div>
+              <div
+                class="skill-node node-c locked"
+                id="gs3-c"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="gs3-a"
+                data-children="gs3-f"
+              >
+                C
+              </div>
+              <div
+                class="skill-node node-d locked"
+                id="gs3-d"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs3-a"
+              >
+                D
+              </div>
+              <div
+                class="skill-node node-e locked"
+                id="gs3-e"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs3-b"
+                data-children="gs3-g"
+              >
+                E
+              </div>
+              <div
+                class="skill-node node-f locked"
+                id="gs3-f"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs3-c"
+              >
+                F
+              </div>
+              <div
+                class="skill-node node-g locked"
+                id="gs3-g"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs3-e"
+                data-children="gs4-a"
+              >
+                G
+              </div>
+            </div>
+          </div>
+
+          <div class="column-wrapper">
+            <h2 class="column-title">Guard</h2>
+            <div class="skill-column" id="gs-column-4">
+              <div
+                class="skill-node node-a locked"
+                id="gs4-a"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs3-g"
+                data-children="gs4-b"
+              >
+                A
+              </div>
+              <div
+                class="skill-node node-b locked"
+                id="gs4-b"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="gs4-a"
+                data-children="gs4-c,gs4-d"
+              >
+                B
+              </div>
+              <div
+                class="skill-node node-c locked"
+                id="gs4-c"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="gs4-b"
+                data-children="gs4-e,gs4-f"
+              >
+                C
+              </div>
+              <div
+                class="skill-node node-d locked"
+                id="gs4-d"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs4-b"
+              >
+                D
+              </div>
+              <div
+                class="skill-node node-e locked"
+                id="gs4-e"
+                data-max-points="3"
+                data-current-points="0"
+                data-prereq="gs4-c"
+                data-children="gs4-g"
+              >
+                E
+              </div>
+              <div
+                class="skill-node node-f locked"
+                id="gs4-f"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs4-c"
+              >
+                F
+              </div>
+              <div
+                class="skill-node node-g locked"
+                id="gs4-g"
+                data-max-points="1"
+                data-current-points="0"
+                data-prereq="gs4-e"
+              >
+                G
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty Spear Tree as placeholder -->
+      <div class="skill-tree-content" id="spear-tree">
+        <svg class="skill-lines" id="spear-lines"></svg>
+        <div class="skill-columns-container" id="spear-columns">
+          <div class="column-wrapper">
+            <h2 class="column-title">Spear Tree Coming Soon</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty Common Tree as placeholder -->
+      <div class="skill-tree-content" id="common-tree">
+        <svg class="skill-lines" id="common-lines"></svg>
+        <div class="skill-columns-container" id="common-columns">
+          <div class="column-wrapper">
+            <h2 class="column-title">Common Tree Coming Soon</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="points-control">
+        <label for="available-points-input">Available Skill Points: </label>
+        <div class="points-controls-wrapper">
+          <input
+            type="number"
+            id="available-points-input"
+            min="0"
+            max="350"
+            value="10"
+          />
+          <button id="apply-points" title="Apply">Apply</button>
+        </div>
+        <button id="reset-all-points" title="Reset all invested points">
+          Reset All
+        </button>
+      </div>
+
+      <!-- Update the available points display -->
+      <div id="available-points" class="skill-points">
+        Points: <span>10</span>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

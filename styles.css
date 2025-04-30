@@ -1,0 +1,350 @@
+/* Custom styles */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #111827; /* Dark background */
+  color: #d1d5db;
+  position: relative; /* Needed for absolute positioning of top-right info */
+  min-height: 100vh;
+}
+
+/* Top Right Info Container */
+#topRightInfo {
+  position: absolute;
+  top: 1.5rem; /* Adjust as needed */
+  right: 1.5rem; /* Adjust as needed */
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Space between Level and Points */
+  background-color: rgba(31, 41, 55, 0.8); /* Semi-transparent bg */
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #4b5563;
+  z-index: 50; /* Ensure it's above other content */
+}
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.info-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #9ca3af;
+}
+.info-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+#levelInput {
+  /* Specific styling for level input in top right */
+  width: 4rem; /* Smaller width */
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #4b5563;
+  background-color: #1f2937; /* Darker input bg */
+  color: #e5e7eb;
+  text-align: center;
+}
+/* Hide spinner buttons on number input */
+#levelInput::-webkit-outer-spin-button,
+#levelInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#levelInput[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+/* Main container for layout */
+.layout-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  max-width: 95%; /* Use percentage for better responsiveness */
+  margin: 0 auto;
+  padding-top: 50px; /* Add padding to prevent overlap with top-right info */
+}
+
+/* Level Markers Column */
+.level-markers {
+  padding-top: 60px; /* Align roughly with the start of the tree rows + header */
+  display: flex;
+  flex-direction: column;
+  gap: 70px; /* Corresponds roughly to grid row gap + node height */
+  color: #6b7280;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-align: right;
+  width: 50px;
+  flex-shrink: 0;
+}
+.level-marker {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Skill Tree Area */
+.skill-tree-area {
+  flex-grow: 1;
+  /* Removed max-width to allow expansion */
+}
+
+/* Skill Tree Tabs Container */
+.tabs-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Vertically align keys and tabs */
+  border-bottom: 1px solid #4b5563; /* Move border here */
+  margin-bottom: 20px; /* Space below tabs */
+}
+/* Key Indicators */
+.key-indicator {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #9ca3af;
+  border: 1px solid #6b7280;
+  border-radius: 0.25rem;
+  padding: 2px 6px;
+  margin: 0 10px; /* Space around keys */
+}
+
+/* Actual Tabs List */
+#treeTabs {
+  display: flex;
+  justify-content: center;
+  /* border-bottom: 1px solid #4b5563; */ /* Removed border */
+  /* margin-bottom: 20px; */ /* Removed margin */
+}
+
+.tree-tab {
+  padding: 8px 16px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease-in-out;
+  color: #9ca3af;
+  font-weight: 500;
+}
+.tree-tab:hover {
+  color: #e5e7eb;
+  border-bottom-color: #4b5563;
+}
+.tree-tab.active {
+  color: #f87171;
+  border-bottom-color: #f87171;
+  font-weight: 600;
+}
+
+/* Skill Node Base Style - CIRCLE */
+.skill-node {
+  width: 50px;
+  height: 50px;
+  border: 2px solid #4b5563;
+  background-color: #374151;
+  border-radius: 50%; /* Default circle */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.65rem;
+  font-weight: bold;
+  user-select: none;
+  text-align: center;
+  line-height: 1;
+  overflow: visible;
+  color: #d1d5db;
+}
+/* Rhombus shape for SINGLE-point skills */
+.skill-node.single-point {
+  border-radius: 0;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.skill-node-icon {
+  margin-bottom: 2px;
+}
+
+/* Skill states */
+.skill-node.available {
+  border-color: #60a5fa;
+  cursor: pointer;
+}
+.skill-node.allocated {
+  background-color: #34d399;
+  border-color: #a7f3d0;
+  color: #064e3b;
+}
+.skill-node.maxed {
+  background-color: #facc15;
+  border-color: #fde68a;
+  color: #713f12;
+}
+.skill-node.unavailable {
+  border-color: #4b5563;
+  background-color: #374151;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.skill-node.selected {
+  border-color: #facc15;
+  box-shadow: 0 0 15px rgba(250, 204, 21, 0.6);
+  transform: scale(1.1);
+}
+
+/* Hover effects */
+.skill-node.available:not(.selected):hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(96, 165, 250, 0.5);
+}
+.skill-node.allocated:not(.maxed):not(.selected):hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(52, 211, 153, 0.5);
+}
+.skill-node.maxed:not(.selected):hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(250, 204, 21, 0.5);
+}
+
+/* Tooltip */
+.skill-tooltip {
+  visibility: hidden;
+  width: auto;
+  min-width: 100px;
+  max-width: 200px;
+  background-color: #1f2937;
+  color: #e5e7eb;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 10;
+  bottom: 115%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.75rem;
+  border: 1px solid #4b5563;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+}
+.skill-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1f2937 transparent transparent transparent;
+}
+.skill-node:hover .skill-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Points display */
+.skill-points-display {
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(17, 24, 39, 0.8);
+  color: #9ca3af;
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-size: 0.65rem;
+  font-weight: normal;
+  white-space: nowrap;
+}
+.skill-node.maxed .skill-points-display,
+.skill-node.allocated .skill-points-display {
+  color: #e5e7eb;
+}
+
+/* Column Headers Container */
+#columnHeaders {
+  display: grid; /* Use grid for alignment */
+  /* Columns defined dynamically by JS */
+  gap: 0 40px; /* Only column gap, same as skill tree */
+  padding: 0 40px; /* Match skill tree padding */
+  margin: 0 auto; /* Center */
+  margin-bottom: 10px; /* Space below headers */
+  color: #9ca3af;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  /* max-width: 900px; */ /* Match skill tree area width if needed */
+}
+.column-header {
+  /* Styles for individual header */
+  padding-bottom: 5px;
+  border-bottom: 1px solid #4b5563; /* Separator line */
+}
+
+/* Skill Tree Container (Grid) */
+.skill-tree-container {
+  position: relative;
+  padding: 40px;
+  display: grid;
+  /* Columns defined dynamically by JS */
+  gap: 60px 40px; /* Row gap, Column gap */
+  justify-items: center;
+  margin: 0 auto;
+  min-height: 400px;
+  background-color: #1f2937;
+  border-radius: 8px;
+}
+
+/* Lines */
+.line {
+  position: absolute;
+  background-color: #4b5563;
+  z-index: -1;
+  transition: background-color 0.3s ease;
+  height: 2px;
+}
+.line.active {
+  background-color: #60a5fa;
+}
+
+/* Description Panel */
+#descriptionPanel {
+  background-color: #1f2937;
+  border: 1px solid #4b5563;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: left;
+  min-height: 150px;
+  display: none;
+}
+#descriptionPanel.visible {
+  display: block;
+}
+#skillDetailName {
+  color: #f87171;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+#skillDetailDesc {
+  color: #d1d5db;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+#skillDetailReqs {
+  color: #9ca3af;
+  font-size: 0.8rem;
+  border-top: 1px solid #4b5563;
+  padding-top: 10px;
+  margin-top: 10px;
+}
