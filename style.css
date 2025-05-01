@@ -502,22 +502,15 @@ body {
 /* Set the text content for each node */
 
 
-#c1-h::after { content: "H"; }
 
 
 
 
 
-#c4-a::after { content: "A"; }
-#c4-b::after { content: "B"; }
-#c4-c::after { content: "C"; }
-#c4-d::after { content: "D"; }
-#c4-f::after { content: "F"; }
-#c4-h::after { content: "H"; }
-#c4-i::after { content: "I"; }
-#c4-j::after { content: "J"; }
-#c4-l::after { content: "L"; }
-#c4-g::after { content: "G"; }
+
+
+
+
 
 #c5-a::after { content: "A"; }
 #c5-b::after { content: "B"; }
@@ -556,8 +549,16 @@ body {
 .node-l1 .skill-icon
 {
   transform: rotate(-45deg); /* Counter the 45deg rotation of the rhombus */
-  
 
+}
+
+.node-b4 .skill-icon,
+.node-c4 .skill-icon,
+.node-i4 .skill-icon,
+.node-l4 .skill-icon,
+.node-j4 .skill-icon,
+.node-g4 .skill-icon{
+  transform: rotate(-45deg); /* Counter the 45deg rotation of the rhombus */
 }
 
 /* Define icons using data-icon attributes */
@@ -673,6 +674,66 @@ body {
 .skill-icon[data-icon="breeze-dash-triple"] {
   background-image: url('icons/breeze_dash_triple.webp');
 }
+
+.skill-icon[data-icon="nimble-blitz"] {
+  background-image: url('icons/nimble_blitz.webp');
+}
+
+.skill-icon[data-icon="fleet-footed"] {
+  background-image: url('icons/fleet_footed.webp');
+}
+
+.skill-icon[data-icon="aggressive-action"] {
+  background-image: url('icons/aggressive_action.webp');
+}
+
+.skill-icon[data-icon="deftness"] {
+  background-image: url('icons/deftness.webp');
+}
+
+.skill-icon[data-icon="deftness-lightfoot"] {
+  background-image: url('icons/deftness_lightfoot.webp');
+}
+
+.skill-icon[data-icon="gust"] {
+  background-image: url('icons/gust.webp');
+}
+
+.skill-icon[data-icon="gust-strength"] {
+  background-image: url('icons/gust_strength.webp');
+}
+
+.skill-icon[data-icon="gust-stream"] {
+  background-image: url('icons/gust_stream.webp');
+}
+
+.skill-icon[data-icon="cold-blood-stamina"] {
+  background-image: url('icons/cold_blood_stamina.webp');
+}
+
+.skill-icon[data-icon="cold-blood-spirit"] {
+  background-image: url('icons/cold_blood_spirit.webp');
+}
+
+.skill-icon[data-icon="disciplined-action"] {
+  background-image: url('icons/disciplined_action.webp');
+}
+
+.skill-icon[data-icon="disciplined-action-agility"] {
+  background-image: url('icons/disciplined_action_agility.webp');
+}
+
+.skill-icon[data-icon="zephyr"] {
+  background-image: url('icons/zephyr.webp');
+}
+
+.skill-icon[data-icon="wind-slash-step"] {
+  background-image: url('icons/wind_slash_step.webp');
+}
+
+
+
+
 
 
 

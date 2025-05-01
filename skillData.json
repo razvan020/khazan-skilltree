@@ -1,0 +1,814 @@
+{
+    "skillTrees": {
+      "dual-wield": {
+        "id": "dual-wield-tree",
+        "title": "Dual Wield",
+        "columns": [
+          {
+            "id": "column-1",
+            "title": "Swift Attack",
+            "nodes": [
+              {
+                "id": "c1-a",
+                "title": "Blazing Assault",
+                "type": "Swift Attack",
+                "icon": "blazing-assault",
+                "nodeType": "node-a",
+                "maxPoints": 1,
+                "children": ["c1-b", "c1-c"]
+              },
+              {
+                "id": "c1-b",
+                "title": "Howling Blade",
+                "type": "Passive",
+                "icon": "howling-blade",
+                "nodeType": "node-b",
+                "maxPoints": 3,
+                "children": ["c1-d"],
+                "prereq": "c1-a",
+                "exclusiveWith": "c1-c"
+              },
+              {
+                "id": "c1-c",
+                "title": "Whirlwind",
+                "type": "Passive",
+                "icon": "whirlwind",
+                "nodeType": "node-c",
+                "maxPoints": 3,
+                "children": ["c1-e"],
+                "prereq": "c1-a",
+                "exclusiveWith": "c1-b"
+              },
+              {
+                "id": "c1-d",
+                "title": "Howling Blade: Punishment",
+                "type": "Active Ability",
+                "icon": "howling-blade-punishment",
+                "nodeType": "node-d",
+                "maxPoints": 1,
+                "children": ["c1-f"],
+                "prereq": "c1-b"
+              },
+              {
+                "id": "c1-e",
+                "title": "Whirlwind: Swiftness",
+                "type": "Passive",
+                "icon": "whirlwind-swiftness",
+                "nodeType": "node-e",
+                "maxPoints": 1,
+                "children": ["c1-h"],
+                "prereq": "c1-c"
+              },
+              {
+                "id": "c1-f",
+                "title": "Howling Blade: Resolve",
+                "type": "Active Ability",
+                "icon": "howling-blade-resolve",
+                "nodeType": "node-f",
+                "maxPoints": 1,
+                "children": ["c1-g"],
+                "prereq": "c1-d"
+              },
+              {
+                "id": "c1-g",
+                "title": "Phantom: Sword Dance",
+                "type": "Passive",
+                "icon": "phantom-sword-dance",
+                "nodeType": "node-g",
+                "maxPoints": 3,
+                "children": [],
+                "prereq": "c1-f,c1-h"
+              },
+              {
+                "id": "c1-h",
+                "title": "Whirlwind: Chain",
+                "type": "Active Ability",
+                "icon": "whirlwind-chain",
+                "nodeType": "node-h",
+                "maxPoints": 1,
+                "children": ["c1-g"],
+                "prereq": "c1-e"
+              }
+            ]
+          },
+          {
+            "id": "column-2",
+            "title": "Potent Blow",
+            "nodes": [
+              {
+                "id": "c2-a",
+                "title": "Massive Blow",
+                "type": "Active Ability",
+                "icon": "massive-blow",
+                "nodeType": "node-a",
+                "maxPoints": 1,
+                "children": [],
+                "prereq": "c1-g"
+              },
+              {
+                "id": "c2-b",
+                "title": "Dragon Slayer",
+                "type": "Active Ability",
+                "icon": "dragon-slayer",
+                "nodeType": "node-b",
+                "maxPoints": 1,
+                "children": ["c2-d"],
+                "prereq": "c2-a",
+                "exclusiveWith": "c2-c"
+              },
+              {
+                "id": "c2-c",
+                "title": "Gale",
+                "type": "Active Ability",
+                "icon": "gale",
+                "nodeType": "node-c",
+                "maxPoints": 3,
+                "children": ["c2-e"],
+                "prereq": "c2-a",
+                "exclusiveWith": "c2-b"
+              },
+              {
+                "id": "c2-d",
+                "title": "Dragon Slayer: Intuition",
+                "type": "Active Ability",
+                "icon": "dragon-slayer-intuition",
+                "nodeType": "node-d",
+                "maxPoints": 1,
+                "children": ["c2-f"],
+                "prereq": "c2-b"
+              },
+              {
+                "id": "c2-e",
+                "title": "Gale: Scar",
+                "type": "Active Ability",
+                "icon": "gale-scar",
+                "nodeType": "node-e",
+                "maxPoints": 1,
+                "children": ["c2-h"],
+                "prereq": "c2-c"
+              },
+              {
+                "id": "c2-f",
+                "title": "Dragon Slayer: Chain",
+                "type": "Active Ability",
+                "icon": "dragon-slayer-chain",
+                "nodeType": "node-f",
+                "maxPoints": 1,
+                "children": [],
+                "prereq": "c2-d"
+              },
+              {
+                "id": "c2-h",
+                "title": "Gale: Smash",
+                "type": "Active Ability",
+                "icon": "gale-smash",
+                "nodeType": "node-h",
+                "maxPoints": 1,
+                "children": [],
+                "prereq": "c2-e"
+              }
+            ]
+          },
+          {
+            "id": "column-3",
+            "title": "Frenzy",
+            "nodes": [
+              {
+                "id": "c3-a",
+                "title": "Wind Chaser",
+                "type": "Active Ability",
+                "icon": "wind-chaser",
+                "nodeType": "node-a",
+                "maxPoints": 1,
+                "children": ["c3-d"],
+                "prereq": ""
+              },
+              {
+                "id": "c3-b",
+                "title": "Outrage",
+                "type": "Active Ability",
+                "icon": "outrage",
+                "nodeType": "node-b",
+                "maxPoints": 1,
+                "children": ["c3-c", "c3-e"],
+                "prereq": ""
+              },
+              {
+                "id": "c3-c",
+                "title": "Ruthless",
+                "type": "Active Ability",
+                "icon": "ruthless",
+                "nodeType": "node-c",
+                "maxPoints": 3,
+                "children": ["c3-g"],
+                "prereq": "c3-b"
+              },
+              {
+                "id": "c3-d",
+                "title": "Wind Chaser: Swift",
+                "type": "Active Ability",
+                "icon": "wind-chaser-swift",
+                "nodeType": "node-d",
+                "maxPoints": 1,
+                "children": [],
+                "prereq": "c3-a"
+              },
+              {
+                "id": "c3-e",
+                "title": "Breeze Dash",
+                "type": "Active Ability",
+                "icon": "breeze-dash",
+                "nodeType": "node-e",
+                "maxPoints": 3,
+                "children": ["c3-i"],
+                "prereq": "c3-b"
+              },
+              {
+                "id": "c3-f",
+                "title": "Wind Piercer",
+                "type": "Active Ability",
+                "icon": "wind-piercer",
+                "nodeType": "node-f",
+                "maxPoints": 1,
+                "children": ["c3-h"],
+                "prereq": "c3-d"
+              },
+              {
+                "id": "c3-g",
+                "title": "Ruthless: Stamina",
+                "type": "Active Ability",
+                "icon": "ruthless-stamina",
+                "nodeType": "node-g",
+                "maxPoints": 1,
+                "children": ["c3-j"],
+                "prereq": "c3-c"
+              },
+              {
+                "id": "c3-h",
+                "title": "Wind Piercer: Persistence",
+                "type": "Active Ability",
+                "icon": "wind-piercer-persistence",
+                "nodeType": "node-h",
+                "maxPoints": 1,
+                "children": ["c3-k"],
+                "prereq": "c3-f"
+              },
+              {
+                "id": "c3-i",
+                "title": "Breeze Dash: Chain",
+                "type": "Active Ability",
+                "icon": "breeze-dash-chain",
+                "nodeType": "node-i",
+                "maxPoints": 1,
+                "children": ["c3-l"],
+                "prereq": "c3-e"
+              },
+              {
+                "id": "c3-j",
+                "title": "Ruthless: Strength",
+                "type": "Active Ability",
+                "icon": "ruthless-strength",
+                "nodeType": "node-j",
+                "maxPoints": 1,
+                "children": [],
+                "prereq": "c3-g"
+              },
+              {
+                "id": "c3-k",
+                "title": "Wind Piercer: Mark",
+                "type": "Active Ability",
+                "icon": "wind-piercer-mark",
+                "nodeType": "node-k",
+                "maxPoints": 1,
+                "children": [],
+                "prereq": "c3-h"
+              },
+              {
+                "id": "c3-l",
+                "title": "Breeze Dash: Triple",
+                "type": "Active Ability",
+                "icon": "breeze-dash-triple",
+                "nodeType": "node-l",
+                "maxPoints": 1,
+                "children": [],
+                "prereq": "c3-i"
+              }
+            ]
+          },
+          {
+            "id": "column-4",
+            "title": "Penetrate",
+            "nodes": [
+              {
+                "id": "c4-a",
+                "title": "Wind Chaser",
+                "type": "Active Ability",
+                "icon": "wind-chaser",
+                "nodeType": "node-a",
+                "maxPoints": 1,
+                "children": ["c3-d"],
+                "prereq": ""
+              },
+              {
+                "id": "c4-b",
+                "title": "Outrage",
+                "type": "Active Ability",
+                "icon": "outrage",
+                "nodeType": "node-b",
+                "maxPoints": 3,
+                "prereq": ""
+              },
+              {
+                "id": "c4-c",
+                "title": "Ruthless",
+                "type": "Active Ability",
+                "icon": "ruthless",
+                "nodeType": "node-c",
+                "maxPoints": 1
+              },
+              {
+                "id": "c4-d",
+                "title": "Wind Chaser: Swift",
+                "type": "Active Ability",
+                "icon": "wind-chaser-swift",
+                "nodeType": "node-d",
+                "maxPoints": 1,
+                "children": [],
+                "prereq": "c4-a"
+              },
+              {
+                "id": "c4-e",
+                "title": "Breeze Dash",
+                "type": "Active Ability",
+                "icon": "breeze-dash",
+                "nodeType": "node-e",
+                "maxPoints": 3,
+                "children": ["c4-i"],
+                "prereq": "c4-b"
+              },
+              {
+                "id": "c4-f",
+                "title": "Wind Piercer",
+                "type": "Active Ability",
+                "icon": "wind-piercer",
+                "nodeType": "node-f",
+                "maxPoints": 3,
+                "children": ["c3-j"],
+                "prereq": "c3-c"
+              },
+              {
+                "id": "c4-g",
+                "title": "Ruthless: Stamina",
+                "type": "Active Ability",
+                "icon": "ruthless-stamina",
+                "nodeType": "node-g",
+                "maxPoints": 1,
+                "children": ["c4-m"],
+                "prereq": "c4-f"
+              },
+              {
+                "id": "c4-h",
+                "title": "Wind Piercer: Persistence",
+                "type": "Active Ability",
+                "icon": "wind-piercer-persistence",
+                "nodeType": "node-h",
+                "maxPoints": 1,
+                "prereq": "c4-d"
+              },
+              {
+                "id": "c4-i",
+                "title": "Breeze Dash: Chain",
+                "type": "Active Ability",
+                "icon": "breeze-dash-chain",
+                "nodeType": "node-i",
+                "maxPoints": 1,
+                "children": ["c4-l"],
+                "prereq": "c4-e"
+              },
+              {
+                "id": "c4-j",
+                "title": "Ruthless: Strength",
+                "type": "Active Ability",
+                "icon": "ruthless-strength",
+                "nodeType": "node-j",
+                "maxPoints": 3,
+                "prereq": "c4-f"
+              },
+              {
+                "id": "c4-k",
+                "title": "Wind Piercer: Mark",
+                "type": "Active Ability",
+                "icon": "wind-piercer-mark",
+                "nodeType": "node-k",
+                "maxPoints": 3,
+                "prereq": "c4-g"
+              },
+              {
+                "id": "c4-l",
+                "title": "Breeze Dash: Triple",
+                "type": "Active Ability",
+                "icon": "breeze-dash-triple",
+                "nodeType": "node-l",
+                "maxPoints": 1,
+                "prereq": "c4-i"
+              },
+              {
+                "id": "c4-m",
+                "title": "Breeze Dash: Triple",
+                "type": "Active Ability",
+                "icon": "breeze-dash-triple",
+                "nodeType": "node-m",
+                "maxPoints": 1,
+                "prereq": "c4-g"
+              }
+              ,
+              {
+                "id": "c4-n",
+                "title": "Breeze Dash: Triple",
+                "type": "Active Ability",
+                "icon": "breeze-dash-triple",
+                "nodeType": "node-n",
+                "maxPoints": 1,
+                "prereq": "c4-h"
+              }
+            ]
+          }
+        ]
+      },
+      "greatsword": {
+        "id": "greatsword-tree",
+        "title": "Greatsword",
+        "columns": [
+          {
+            "id": "gs-column-0",
+            "title": "Swift Attack",
+            "nodes": [
+              {
+                "id": "gs0-a",
+                "title": "Savage Momentum",
+                "type": "Swift Attack",
+                "icon": "savage-momentum",
+                "nodeType": "node-a",
+                "maxPoints": 1,
+                "children": ["gs0-b", "gs0-c"],
+                "prereq": ""
+              },
+              {
+                "id": "gs0-b",
+                "title": "Ground Breaker",
+                "type": "Passive",
+                "icon": "ground-breaker",
+                "nodeType": "node-b",
+                "maxPoints": 3,
+                "children": ["gs0-d"],
+                "prereq": "gs0-a"
+              },
+              {
+                "id": "gs0-c",
+                "title": "Overwhelming Force",
+                "type": "Passive",
+                "icon": "overwhelming-force",
+                "nodeType": "node-c",
+                "maxPoints": 3,
+                "children": [],
+                "prereq": "gs0-a"
+              },
+              {
+                "id": "gs0-d",
+                "title": "Seismic Impact",
+                "type": "Active Ability",
+                "icon": "seismic-impact",
+                "nodeType": "node-d",
+                "maxPoints": 1,
+                "children": [],
+                "prereq": "gs0-b"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    
+    "skillData": {
+      "c1-a": {
+        "title": "Blazing Assault",
+        "type": "Swift Attack",
+        "description": "Gain the ability to use the fifth strike of a swift attack.",
+        "requirements": "Has no requirements"
+      },
+      "c1-b": {
+        "title": "Howling Blade",
+        "type": "Passive",
+        "description": "Potent Blow during a swift attack. dodge swift attack, or Blowback: Vengeance.\n\nActivate a potent blow during a swift attack to deliver a chain of attacks.\n\nThe form of Howling Blade activated will vary depending on the level of the swift attack.\n\nAfter activation. press Swift Attack to chain into a swift attack of the next level.",
+        "requirements": "Requires Blazing Assault, Requires Mastery Level 2"
+      },
+      "c1-c": {
+        "title": "Whirlwind",
+        "type": "Passive",
+        "description": "Press Potent Blow during swift attack, dodge swift attack, or Blowback: Vengeance.\n\nLeaps up and attacks nearby enemies.\n\nPressing Potent Blow again after the upward attack chains into a downward attack.",
+        "requirements": "Requires Blazing Assault, Requires Mastery Level 2" 
+      },
+      "c1-d": {
+        "title": "Howling Blade: Punishment",
+        "type": "Active Ability",
+        "description": "Potent Blow after the fourth strike of a swift attack or after Blazing Assault.\n\nGain the ability to use a finishing blow after the fourth strike of a swift attack and after Blazing Assault.\n\nThe finishing blow consists of a dash followed by consecutive slashes. Press Potent Blow before the dash ends to chain into the consecutive slashes.",
+        "requirements": "Requires Mastery Level 10 and Howling Blade"
+      },
+      "c1-e": {
+        "title": "Whirlwind: Swiftness",
+        "type": "Passive",
+        "description": "Increase the attack speed of Whirlwind.",
+        "requirements": "Requires Mastery Level 10 and Whirlwind"
+      },
+      "c1-f": {
+        "title": "Howling Blade: Resolve",
+        "type": "Active Ability",
+        "description": "Potent Blow after the fourth strike of a swift attack or after Blazing Assault.\n\nGain the ability to use a finishing blow after the fourth strike of a swift attack and after Blazing Assault.\n\nThe finishing blow consists of a dash followed by consecutive slashes. Press Potent Blow before the dash ends to chain into the consecutive slashes.",
+        "requirements": "Requires Mastery Level 18 and Howling Blade: Punishment"
+      },
+      "c1-g": {
+        "title": "Phantom: Sword Dance",
+        "type": "Passive",
+        "description": "Command: Ranged Attack/Skill Combination Key + Potent Blow\n\nResources Used: Spirit 2\n\nAttack the enemy with the Phantom's power.\n\nFor 40 seconds after using Phantom: Sword Dance. the Phantom will rush forward to attack alongside you when using Howling Blade or Whirlwind.",
+        "requirements": "Requires Mastery Level 18"
+      },
+      "c1-h": {
+        "title": "Whirlwind: Chain",
+        "type": "Active Ability",
+        "description": "Press Potent Blow after the downward attack from Whirlwind.\n\nGain the ability to use a follow-up dash attack after the downward attack.",
+        "requirements": "Requires Mastery Level 18 and Whirlwind: Swiftness"
+      },
+      "c2-a": {
+        "title": "Massive Blow",
+        "type": "Active Ability",
+        "description": "Press Potent Blow after the third attack of a potent blow or the charged attack of a potent blow.\n\n Charge forward and attack after the final attack of a potent blow.\n\nThe damage of this skill increases when used after a fully charged potent blow.\n\nThis skill can also be chained after the final attack of potent blow-type attacks.",
+        "requirements": "Has no requirements"
+      },
+      "c2-b": {
+        "title": "Dragon Slayer",
+        "type": "Active Ability",
+        "description": "Hold Potent Blow\n\nCharged potent blows become dash attacks.",
+        "requirements": "Requires Mastery Level 2"
+      },
+      "c2-c": {
+        "title": "Gale",
+        "type": "Active Ability",
+        "description": "Hold Potent Blow \n\nCharged potent blows inflict the Injured status on ememies.\n\nGain the virgor effect every time an Unjured enemy takes damage.\n\nWhile under this effect, damage dealt increases with each stack, up to a maximum of 10 stacks.",
+        "requirements": "Requires Mastery Level 2"
+      },
+      "c2-d": {
+        "title": "Dragon Slayer: Intuition",
+        "type": "Active Ability",
+        "description": "Hold Potent Blow after Dragon Slayer.\n\nPressing Potent Blow again after using Dragon Slayer results in a double slash attack on the enemy.",
+        "requirements": "Requires Mastery Level 10 and Dragon Slayer"
+      },
+      "c2-e": {
+        "title": "Gale: Scar",
+        "type": "Active Ability",
+        "description": "Detonate accumulated vigor to deal significant damage to enemies.\n\nActivate Gale: Scar and remove all vigor effects when striking an enemy with Gale while at 10 vigor stacks.",
+        "requirements": "Requires Mastery Level 10 and Gale"
+      },
+      "c2-f": {
+        "title": "Dragon Slayer: Chain",
+        "type": "Active Ability",
+        "description": "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+        "requirements": "Requires Mastery Level 18 and Dragon Slayer: Intuition"
+      },
+      "c2-h": {
+        "title": "Gale: Smash",
+        "type": "Active Ability",
+        "description": "Resources Used: Spirit 2\n\nHold Potent Blow when landing a strike with Gale.\n\nDetonate vigor inside the enemy.\n\nPoise increases significantly during this attack. \n\nEach detonation of vigor grants additional stacks of vigo",
+        "requirements": "Requires Mastery Level 18 and Gale: Scar"
+      },
+      "c3-a": {
+        "title": "Wind Chaser",
+        "type": "Active Ability",
+        "description": "Press Swift Attack or Potent Blow after spirit attack.\n\nGain the ability to use the second attack of a sprint attack.",
+        "requirements": "Has no requirements"
+      },
+      "c3-b": {
+        "title": "Outrage",
+        "type": "Active Ability",
+        "description": "Potent Blow while spirnting\n\nDeliver a powerful strike while sprinting.\n\nCharging the attack increases the amount of stagger and damage inflicted.",
+        "requirements": "Has no requirements"
+      },
+      "c3-c": {
+        "title": "Ruthless",
+        "type": "Active Ability",
+        "description": "Command: Skill Combination Key + Swift Attack\n\n Resources Used: Spirit 1\n\nSwiftly hack apart the enemy. After a successful strike. each successive input results in a flurry of attacks that increases in speed and consumes stamina.\n\nStopping the input or running out of stamina will automatically result in a finishing blow.\n\nDeliver a powerful finishing blow when the attack speed reaches its maximum.",
+        "requirements": "Requires Mastery Level 2"
+      },
+      "c3-d": {
+        "title": "Wind Chaser: Swift",
+        "type": "Active Ability",
+        "description": "Potent Blow after a spirit attack\n\nSwiftly chains with a potent blow after a spirit atack.",
+        "requirements": "Requires Mastery Level 2 and Wind Chaser"
+      },
+      "c3-e": {
+        "title": "Breeze Dash",
+        "type": "Active Ability",
+        "description": "Command: Skill Combination Key + Swift Attack\n\nResources Used: Spirit 1\n\nSwiftly dash forward and slash the enemy.\n\nThe dash slash can be used up to 2 times and nullifies the damage from enemy attacks when it starts. \n\nEach dash slash consumes i spirit charge",
+        "requirements": "Requires Mastery Level 2"
+      },
+      "c3-f": {
+        "title": "Wind Piercer",
+        "type": "Active Ability",
+        "description": "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+        "requirements": "Requires Mastery Level 18 and Dragon Slayer: Intuition"
+      },
+      "c3-g": {
+        "title": "Ruthless: Stamina",
+        "type": "Active Ability",
+        "description": "The finishing blow of Ruthless is transformed into an arcing strike.\n\nRecover half of the stamina consumed if the strike hits an enemy.",
+        "requirements": "Requires Mastery Level 26 and Ruthless"
+      },
+      "c3-h": {
+        "title": "Wind Piercer: Persistence",
+        "type": "Active Ability",
+        "description": "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+        "requirements": "Requires Mastery Level 18 and Dragon Slayer: Intuition"
+      },
+      "c3-i": {
+        "title": "Breeze Dash: Chain",
+        "type": "Active Ability",
+        "description": "The dash slashes of Breeze Dash deliver multiple strikes to enemies whose damage was nullified.",
+        "requirements": "Requires Mastery Level 26 and Breeze Dash"
+      },
+      "c3-j": {
+        "title": "Ruthless: Strength",
+        "type": "Active Ability",
+        "description": "Ruthless gains unbreakable poise.",
+        "requirements": "Requires Mastery Level 34 and Ruthless: Stamina"
+      },
+      "c3-k": {
+        "title": "Wind Piercer: Mark",
+        "type": "Active Ability",
+        "description": "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+        "requirements": "Requires Mastery Level 18 and Dragon Slayer: Intuition"
+      },
+      "c3-l": {
+        "title": "Breeze Dash: Triple",
+        "type": "Active Ability",
+        "description": "Allows for up to three dash slashes with Breeze Dash.",
+        "requirements": "requires Mastery Level 34 and Breeze Dash: Chain"
+      },
+      "c4-a": {
+        "title": "Nimble Blitz",
+        "type": "Active Ability",
+        "description": "Swift Attack/Fire Ranged Attack while dodging\n\nEnhance the attack that results from activating swift attack while dodging.\n\nForward and lateral attacks become a forward dash followed by two consecutive strikes. \n\nBackward attacks become a backward dash followed by a strike that releases a shockwave.",
+        "requirements": "Has no requirements"
+      },
+      "c4-b": {
+        "title": "Fleet Footed",
+        "type": "Active Ability",
+        "description": "Decrease the stamina cost of dodging.",
+        "requirements": "Has no requirements"
+      },
+      "c4-c": {
+        "title": "Agressive Action",
+        "type": "Active Ability",
+        "description": "Potent Blow during dodge\n\nEnhance the attack that results from activating potent blow while dodging.\n\nHold Potent Blow to activate a charged version of this skill.",
+        "requirements": "Has no requirements"
+      },
+      "c4-d": {
+        "title": "Deftness",
+        "type": "Active Ability",
+        "description": "Move forward + Dodge while attacking\n\nDodging forward while attacking results in a dodge-attack.",
+        "requirements": "Requires Mastery Level 2"
+      },
+      "c4-e": {
+        "title": "Gust",
+        "type": "Active Ability",
+        "description": "Command: Assing Input\n\nResources Used: Spirit 1\n\nTake a powerful swing at the enemy with your axe and sword.",
+        "requirements": "Requires Mastery Level 2"
+      },
+      "c4-f": {
+        "title": "Cold Blood: Stamina",
+        "type": "Active Ability",
+        "description": "Recover stamina upon performing a brink dodge.",
+        "requirements": "Requires Mastery Level 2"
+      },
+      "c4-g": {
+        "title": "Disciplined Action",
+        "type": "Active Ability",
+        "description": "The invincibility duration of dodges increases in proportion to your agility.",
+        "requirements": "Requires Mastery Level 10"
+      },
+      "c4-h": {
+        "title": "Deftness: Lightfoot",
+        "type": "Active Ability",
+        "description": "Increase the distance traveled when dodging and increase the damage of Deftness.",
+        "requirements": "Requires Mastery Level 18 and Deftness"
+      },
+      "c4-i": {
+        "title": "Gust: Strength",
+        "type": "Active Ability",
+        "description": "Nullify damage from enemy attacks when activating Gust.\n\nNullifying damage using Gust restores the spirit consumed by Gust over the course of a few seconds.",
+        "requirements": "Requires Mastery Level 18 and Gust"
+      },
+      "c4-j": {
+        "title": "Cold Blood: Spirit",
+        "type": "Active Ability",
+        "description": "Gain spirit upon performing a brink dodge",
+        "requirements": "requires Mastery Level 18 and Cold Blood: Stamina"
+      },
+      "c4-k": {
+        "title": "Zephyr",
+        "type": "Active Ability",
+        "description": "Command: Assing Input\n\nResources Used: Spirit 1\n\nSkirt around the enemy to attack.\n\nMove left or right using the directional buttons. You will move right if there is no directional input.",
+        "requirements": "Requires Mastery Level 18"
+      },
+      "c4-l": {
+        "title": "Gust: Stream",
+        "type": "Active Ability",
+        "description": "Repeat input after Gust.\n\nDeliver a powerful upward slash.\n\n Activate by repeating the input while Gust is active.\n\nConsume 1 additional spirit charge upon use.",
+        "requirements": "Requires Mastery Level 26 and Gust: Strength"
+      },
+      "c4-m": {
+        "title": "Disciplined Action: Agility",
+        "type": "Active Ability",
+        "description": "Increase the invincibility duration of dodges.",
+        "requirements": "Requires Mastery Level 26 and Disciplined Action"
+      },
+      "c4-n": {
+        "title": "Wind Slash Step",
+        "type": "Active Ability",
+        "description": "Resources Used: Spirit 1\n\nSwift Attack while downed or taking damage. \n\nReact swiftly to danger in critical moments.\n\nUse Wind Slash Step with Swift Attack while downed to quickly regain your stance and attack nearby enemies with a flurry of blades. \n\nUse Wind Slash Step with Swift Attack while taking damage to land a strike where you stand and dash through enemies to break away from your position.",
+        "requirements": "Requires Mastery Level 34"
+      },
+      "gs0-a": {
+        "title": "Savage Momentum",
+        "type": "Swift Attack",
+        "description": "Unleash a shockwave along with a powerful strike to attack enemies in a wide area.",
+        "requirements": "Has no requirements"
+      },
+      "gs0-b": {
+        "title": "Ground Breaker",
+        "type": "Passive",
+        "description": "Swift attacks have a 20% chance to create a shockwave that deals additional damage to nearby enemies.",
+        "requirements": "Requires Savage Momentum"
+      },
+      "gs0-c": {
+        "title": "Overwhelming Force",
+        "type": "Passive",
+        "description": "Increases the damage of swift attacks by 5% for each enemy within 5 meters, up to 25%.",
+        "requirements": "Requires Savage Momentum"
+      },
+      "gs0-d": {
+        "title": "Seismic Impact",
+        "type": "Active Ability",
+        "description": "Strike the ground with tremendous force, stunning enemies within 8 meters for 3 seconds.",
+        "requirements": "Requires Ground Breaker"
+      }
+    },
+    
+    "nodeIconMap": {
+      "c1-a": "blazing-assault",
+      "c1-c": "whirlwind",
+      "c1-e": "whirlwind-swiftness",
+      "c1-h": "whirlwind-chain",
+      "c1-g": "phantom-sword-dance",
+      "c1-b": "howling-blade",
+      "c1-d": "howling-blade-punishment",
+      "c1-f": "howling-blade-resolve",
+      "c2-a": "massive-blow",
+      "c2-c": "gale",
+      "c2-e": "gale-scar",
+      "c2-h": "gale-smash",
+      "c2-b": "dragon-slayer",
+      "c2-d": "dragon-slayer-intuition",
+      "c2-f": "dragon-slayer-chain",
+      "c3-a": "wind-chaser",
+      "c3-b": "outrage",
+      "c3-c": "ruthless",
+      "c3-d": "wind-chaser-swift",
+      "c3-e": "breeze-dash",
+      "c3-f": "wind-piercer",
+      "c3-g": "ruthless-stamina",
+      "c3-h": "wind-piercer-persistence",
+      "c3-i": "breeze-dash-chain",
+      "c3-j": "ruthless-strength",
+      "c3-k": "wind-piercer-mark",
+      "c3-l": "breeze-dash-triple",
+      "c4-a": "nimble-blitz",
+      "c4-b": "fleet-footed",
+      "c4-c": "aggressive-action",
+      "c4-d": "deftness",
+      "c4-e": "gust",
+      "c4-f": "cold-blood-stamina",
+      "c4-g": "disciplined-action",
+      "c4-h": "deftness-lightfoot",
+      "c4-i": "gust-strength",
+      "c4-j": "cold-blood-spirit",
+      "c4-k": "zephyr",
+      "c4-l": "gust-stream",
+      "c4-m": "disciplined-action-agility",
+      "c4-n": "wind-slash-step",
+      "gs0-a": "savage-momentum",
+      "gs0-b": "ground-breaker",
+      "gs0-c": "overwhelming-force",
+      "gs0-d": "seismic-impact"
+    },
+    
+    "commonNodeIds": ["c1-g"]
+  }
