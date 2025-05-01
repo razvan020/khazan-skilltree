@@ -20,6 +20,250 @@ document.addEventListener("DOMContentLoaded", () => {
   cursorFollower.classList.add("cursor-follower");
   document.body.appendChild(cursorFollower);
 
+  const tooltip = document.getElementById("skill-tooltip");
+  let tooltipVisible = false;
+
+  // Skill data - contains information for each skill node
+  const skillData = {
+    // Dual Wield Tree
+    "c1-a": {
+      title: "Blazing Assault",
+      type: "Swift Attack",
+      description:
+        "Gain the ability to use the fifth strike of a swift attack.",
+      requirements: "Has no requirements",
+    },
+    "c1-b": {
+      title: "Howling Blade",
+      type: "Passive",
+      description:
+        "Potent Blow during a swift attack. dodge swift attack, or Blowback: Vengeance.\n\n Activate a potent blow during a swift attack to deliver a chain of attacks.\n\nThe form of Howling Blade activated will vary depending on the level of the swift attack.\n\nAfter activation. press Swift Attack to chain into a swift attack of the next level.",
+      requirements: "Requires Blazing Assault, Requires Mastery Level 2",
+    },
+    "c1-c": {
+      title: "Whirlwind",
+      type: "Passive",
+      description:
+        "Press Potent Blow during swift attack, doge swift attack, or Blowback: Vengeance. \n\n Leaps up and attacks nearby enemies. \n\nPressing Potent Blow again after the upward attack chains into a downard attack.",
+      requirements: "Requires Blazing Assault, Requires Mastery Level 2",
+    },
+    "c1-d": {
+      title: "Howling Blade: Punishment",
+      type: "Active Ability",
+      description:
+        "Potent Blow after the fourth strike of a swift attack or after Blazing Assault.\n\nGain the ability to use a finishing blow after the fourth strike of a swift attack and after Blazing Assault.\n\nThe finishing blow consists of a dash followed by consecutive slashes. Press Potent Blow before the dash ends to chain into the consecutive slashes.",
+      requirements: "Requires Mastery Level 10 and  Howling Blade",
+    },
+    "c1-e": {
+      title: "Whirlwind: Swiftness",
+      type: "Passive",
+      description: "Increase the attack speed of Whirlwind.",
+      requirements: "Requires Mastery Level 10 and Whirlwind",
+    },
+    "c1-f": {
+      title: "Howling Blade: Resolve",
+      type: "Active Ability",
+      description:
+        "Potent Blow after the fourth strike of a swift attack or after Blazing Assault. \n\nGain the ability to use a finishing blow after the fourth strike of a swift attack and after Blazing Assault.\n\nThe finishing blow consists of a dash followed by consecutive slashes. Press Potent Blow before the dash ends to chain into the consecutive slashes.",
+      requirements: "Requires Mastery Level 18 and Howling Blade: Punishment",
+    },
+    "c1-g": {
+      title: "Phantom: Sword Dance",
+      type: "Passive",
+      description:
+        "Command: Ranged Attack/Skill Combination Key + Potent Blow \n\nResources Used: Spirit 2 \n\nAttack the enemy with the Phantom's power. \n\n For 40 seconds after using Phantom: Sword Dance. the Phantom will rush forward to attack alongside you when using Howling Blade or Whirlwind.",
+      requirements: "Requires Mastery Level 18",
+    },
+    "c1-h": {
+      title: "Whirlwind: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after the downward attack from Whirlwind. \n\n Gain the ability to use a follow-up dash attack after the downward attack.",
+      requirements: "Requires Mastery Level 18 and Whirlwind: Swiftness",
+    },
+
+    // Greatsword Swift Attack tree
+    "gs0-a": {
+      title: "Savage Momentum",
+      type: "Swift Attack",
+      description:
+        "Unleash a shockwave along with a powerful strike to attack enemies in a wide area.",
+      requirements: "Has no requirements",
+    },
+    "gs0-b": {
+      title: "Ground Breaker",
+      type: "Passive",
+      description:
+        "Swift attacks have a 20% chance to create a shockwave that deals additional damage to nearby enemies.",
+      requirements: "Requires Savage Momentum",
+    },
+    "gs0-c": {
+      title: "Overwhelming Force",
+      type: "Passive",
+      description:
+        "Increases the damage of swift attacks by 5% for each enemy within 5 meters, up to 25%.",
+      requirements: "Requires Savage Momentum",
+    },
+    "gs0-d": {
+      title: "Seismic Impact",
+      type: "Active Ability",
+      description:
+        "Strike the ground with tremendous force, stunning enemies within 8 meters for 3 seconds.",
+      requirements: "Requires Ground Breaker",
+    },
+    // Add more skill data as needed
+  };
+
+  // Add mouseenter and mouseleave events for all skill nodes
+  document.querySelectorAll(".skill-node").forEach((node) => {
+    node.addEventListener("mouseenter", (e) => showTooltip(e, node));
+    node.addEventListener("mouseleave", hideTooltip);
+  });
+
+  function showTooltip(e, node) {
+    const nodeId = node.id;
+    const data = skillData[nodeId];
+
+    // Only show tooltip if we have data for this skill
+    if (!data) return;
+
+    // Update tooltip content
+    document.querySelector(".tooltip-title").textContent = data.title;
+    document.querySelector(".tooltip-type").textContent = data.type;
+    document.querySelector(".tooltip-description").textContent =
+      data.description;
+
+    const reqElement = document.querySelector(".tooltip-requirements");
+    reqElement.textContent = `Requirements: ${data.requirements}`;
+
+    // Check if requirements are met and add appropriate class
+    if (
+      node.classList.contains("locked") ||
+      node.classList.contains("path-locked")
+    ) {
+      reqElement.classList.add("not-met");
+    } else {
+      reqElement.classList.remove("not-met");
+    }
+
+    // Position the tooltip
+    positionTooltip(e);
+
+    // Show the tooltip
+    tooltip.classList.add("visible");
+    tooltipVisible = true;
+  }
+
+  function hideTooltip() {
+    tooltip.classList.remove("visible");
+    tooltipVisible = false;
+  }
+
+  function autoAssignIcons() {
+    // Use the skill data you already have
+    Object.entries(skillData).forEach(([nodeId, data]) => {
+      const node = document.getElementById(nodeId);
+      if (node) {
+        // Convert title to kebab-case for the icon name
+        const iconName = data.title.toLowerCase().replace(/\s+/g, "-");
+
+        // Create or update icon element
+        let iconElement = node.querySelector(".skill-icon");
+        if (!iconElement) {
+          iconElement = document.createElement("div");
+          iconElement.className = "skill-icon";
+          node.appendChild(iconElement);
+        }
+
+        // Set the icon name
+        iconElement.dataset.icon = iconName;
+      }
+    });
+  }
+
+  const nodeIconMap = {
+    "c1-a": "blazing-assault",
+    "c1-c": "whirlwind",
+    "c1-e": "whirlwind-swiftness",
+    "c1-h": "whirlwind-chain",
+    "c1-g": "phantom-sword-dance",
+    "c1-b": "howling-blade",
+    "c1-d": "howling-blade-punishment",
+    "c1-f": "howling-blade-resolve",
+    "gs0-a": "savage-momentum",
+    // Add more icon mappings as needed
+  };
+
+  // Apply icons based on the mapping
+  function applySkillIcons() {
+    Object.entries(nodeIconMap).forEach(([nodeId, iconType]) => {
+      const node = document.getElementById(nodeId);
+      if (node) {
+        // Check if icon already exists to avoid duplicates
+        let iconElement = node.querySelector(".skill-icon");
+        if (!iconElement) {
+          // Create the icon if it doesn't exist
+          iconElement = document.createElement("div");
+          iconElement.className = "skill-icon";
+          node.appendChild(iconElement);
+        }
+        // Set the data-icon attribute to determine which icon to display
+        iconElement.dataset.icon = iconType;
+      }
+    });
+  }
+
+  // Call this function when initializing
+  applySkillIcons();
+
+  function positionTooltip(e) {
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    const tooltipWidth = tooltip.offsetWidth;
+    const tooltipHeight = tooltip.offsetHeight;
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    // Remove existing arrow classes
+    tooltip.classList.remove(
+      "arrow-left",
+      "arrow-right",
+      "arrow-top",
+      "arrow-bottom"
+    );
+
+    // Determine best position for tooltip - default is right side
+    let left = mouseX + 20;
+    let top = mouseY - tooltipHeight / 2;
+    let arrowClass = "arrow-left";
+
+    // If too close to right edge, show on left side instead
+    if (left + tooltipWidth > windowWidth - 20) {
+      left = mouseX - tooltipWidth - 20;
+      arrowClass = "arrow-right";
+    }
+
+    // If too close to bottom or top, adjust vertical position
+    if (top + tooltipHeight > windowHeight - 20) {
+      top = windowHeight - tooltipHeight - 20;
+    }
+    if (top < 20) {
+      top = 20;
+    }
+
+    // Apply position and arrow class
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${top}px`;
+    tooltip.classList.add(arrowClass);
+  }
+
+  // Track mouse movement when tooltip is visible to allow smoother interaction
+  document.addEventListener("mousemove", (e) => {
+    if (tooltipVisible) {
+      positionTooltip(e);
+    }
+  });
+
   // Update cursor follower position smoothly with requestAnimationFrame
   let mouseX = 0,
     mouseY = 0;

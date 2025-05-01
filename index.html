@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Skill Tree - Tabs</title>
+    <title>Khazan: Skill Tree</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -53,7 +53,7 @@
                 data-current-points="0"
                 data-children="c1-b,c1-c"
               >
-                A
+                <div class="skill-icon" data-icon="blazing-assault"></div>
               </div>
               <div
                 class="skill-node node-b locked"
@@ -63,7 +63,7 @@
                 data-prereq="c1-a"
                 data-children="c1-d"
               >
-                B
+                <div class="skill-icon" data-icon="howling-blade"></div>
               </div>
               <div
                 class="skill-node node-c locked"
@@ -73,7 +73,7 @@
                 data-prereq="c1-a"
                 data-children="c1-e"
               >
-                C
+                <div class="skill-icon" data-icon="whirlwind"></div>
               </div>
               <div
                 class="skill-node node-d locked"
@@ -83,7 +83,10 @@
                 data-prereq="c1-b"
                 data-children="c1-f"
               >
-                D
+                <div
+                  class="skill-icon"
+                  data-icon="howling-blade-punishment"
+                ></div>
               </div>
               <div
                 class="skill-node node-e locked"
@@ -93,7 +96,7 @@
                 data-prereq="c1-c"
                 data-children="c1-h"
               >
-                E
+                <div class="skill-icon" data-icon="whirlwind-swiftness"></div>
               </div>
               <div
                 class="skill-node node-f locked"
@@ -103,7 +106,7 @@
                 data-prereq="c1-d"
                 data-children="c1-g"
               >
-                F
+                <div class="skill-icon" data-icon="howling-blade-resolve"></div>
               </div>
               <div
                 class="skill-node node-g locked"
@@ -112,7 +115,7 @@
                 data-current-points="0"
                 data-prereq="c1-f,c1-h"
               >
-                G
+                <div class="skill-icon" data-icon="phantom-sword-dance"></div>
               </div>
               <div
                 class="skill-node node-h locked"
@@ -122,7 +125,7 @@
                 data-prereq="c1-e"
                 data-children="c1-g"
               >
-                H
+                <div class="skill-icon" data-icon="whirlwind-chain"></div>
               </div>
             </div>
           </div>
@@ -1005,6 +1008,15 @@
       <div id="available-points" class="skill-points">
         Points: <span>10</span>
       </div>
+    </div>
+
+    <div class="skill-tooltip" id="skill-tooltip">
+      <div class="tooltip-header">
+        <div class="tooltip-title">Skill Name</div>
+        <div class="tooltip-type">Type</div>
+      </div>
+      <div class="tooltip-description">Skill description goes here.</div>
+      <div class="tooltip-requirements">Requirements: None</div>
     </div>
 
     <script src="script.js"></script>
