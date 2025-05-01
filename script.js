@@ -646,6 +646,32 @@ document.addEventListener("DOMContentLoaded", () => {
     tooltipVisible = false;
   }
 
+  function checkExclusiveConstraints() {
+    // Get all nodes with exclusive relationships
+    const exclusiveNodes = document.querySelectorAll(
+      ".skill-node[data-exclusive-with]"
+    );
+
+    exclusiveNodes.forEach((node) => {
+      const exclusiveWithId = node.dataset.exclusiveWith;
+      const exclusiveNode = document.getElementById(exclusiveWithId);
+
+      if (exclusiveNode) {
+        // If this node has points, lock the exclusive alternative
+        if (parseInt(node.dataset.currentPoints) > 0) {
+          exclusiveNode.classList.add("path-locked");
+          lockDescendantsExceptCommon(exclusiveNode);
+        }
+
+        // And vice versa - if the exclusive node has points, lock this one
+        if (parseInt(exclusiveNode.dataset.currentPoints) > 0) {
+          node.classList.add("path-locked");
+          lockDescendantsExceptCommon(node);
+        }
+      }
+    });
+  }
+
   function positionTooltip(e) {
     const mouseX = e.clientX;
     const mouseY = e.clientY;
@@ -870,11 +896,21 @@ document.addEventListener("DOMContentLoaded", () => {
       // If this is the first point in this node, lock alternative paths
       if (currentPoints === 1) {
         lockAlternativePaths(clickedNode);
+
+        // NEW: Also lock exclusive paths if defined
+        if (clickedNode.dataset.exclusiveWith) {
+          const exclusiveNode = document.getElementById(
+            clickedNode.dataset.exclusiveWith
+          );
+          if (exclusiveNode) {
+            exclusiveNode.classList.add("path-locked");
+            lockDescendantsExceptCommon(exclusiveNode);
+          }
+        }
       }
 
       updateNodeStates(); // This will trigger line redraw via timeout
-      updatePointCounters(); // Update the point counters
-
+      updatePointCounters();
       console.log(
         `Learned ${clickedNode.id}, level ${currentPoints}/${maxPoints}. Points left: ${availablePoints}`
       );
@@ -953,6 +989,20 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         unlockAllPathsFromParent(clickedNode);
         unlockAlternativePaths(clickedNode);
+
+        // NEW: Unlock exclusive paths if defined
+        if (clickedNode.dataset.exclusiveWith) {
+          const exclusiveNode = document.getElementById(
+            clickedNode.dataset.exclusiveWith
+          );
+          if (
+            exclusiveNode &&
+            exclusiveNode.classList.contains("path-locked")
+          ) {
+            exclusiveNode.classList.remove("path-locked");
+            unlockDescendants(exclusiveNode);
+          }
+        }
       }
 
       // Highlight the node
@@ -1182,6 +1232,8 @@ document.addEventListener("DOMContentLoaded", () => {
       clearTimeout(window.drawLinesTimeout);
       window.drawLinesTimeout = setTimeout(drawAllLines, 50);
     }
+
+    checkExclusiveConstraints();
   }
 
   function updatePointCounters() {

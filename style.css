@@ -784,11 +784,39 @@ body {
   border-bottom: none;
 }
 
+.skill-node[data-exclusive-with]::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 2px;
+  background-color: #444;
+  transform: translate(100%, 0);
+  top: 50%;
+  right: 0;
+  z-index: 0;
+}
+
 /* Fix the X overlay for path-locked rhombus nodes */
 .skill-node.path-locked::before {
-  z-index: 10; /* Ensure it's on top */
-  font-size: 1.8em !important; /* Force size regardless of parent */
-  transform: translate(-50%, -50%) rotate(-45deg); /* Align with the node */
+  content: "✕";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.8em;
+  color: #771111;
+  opacity: 0.7;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.node-a.path-locked::before,
+.node-d.path-locked::before,
+.node-e.path-locked::before,
+.node-f.path-locked::before,
+.node-g.path-locked::before,
+.node-h.path-locked::before {
+  transform: translate(-50%, -50%) rotate(-45deg); /* Counter-rotate the X to match node rotation */
 }
 
 .nav-key-hint {
