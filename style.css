@@ -510,15 +510,6 @@ body {
 
 
 
-
-
-#c5-a::after { content: "A"; }
-#c5-b::after { content: "B"; }
-#c5-f::after { content: "F"; }
-#c5-g::after { content: "G"; }
-#c5-h::after { content: "H"; }
-#c5-i::after { content: "I"; }
-
 .skill-icon {
   background-size: contain;
   background-position: center;
@@ -558,6 +549,12 @@ body {
 .node-l4 .skill-icon,
 .node-j4 .skill-icon,
 .node-g4 .skill-icon{
+  transform: rotate(-45deg); /* Counter the 45deg rotation of the rhombus */
+}
+
+.node-b5 .skill-icon,
+.node-g5 .skill-icon,
+.node-i5 .skill-icon{
   transform: rotate(-45deg); /* Counter the 45deg rotation of the rhombus */
 }
 
@@ -731,14 +728,41 @@ body {
   background-image: url('icons/wind_slash_step.webp');
 }
 
+.skill-icon[data-icon="blowback"] {
+  background-image: url('icons/blowback.webp');
+}
 
+.skill-icon[data-icon="blowback-vengeance"] {
+  background-image: url('icons/blowback_vengeance.webp');
+}
 
+.skill-icon[data-icon="ironclad"] {
+  background-image: url('icons/ironclad.webp');
+}
 
+.skill-icon[data-icon="reversal"] {
+  background-image: url('icons/reversal.webp');
+}
 
+.skill-icon[data-icon="reversal-assault"] {
+  background-image: url('icons/reversal_assault.webp');
+}
 
+.skill-icon[data-icon="reversal-flow"] {
+  background-image: url('icons/reversal_flow.webp');
+}
 
+.skill-icon[data-icon="flash-cutter"] {
+  background-image: url('icons/flash_cutter.webp');
+}
 
+.skill-icon[data-icon="flash-cutter-counter"] {
+  background-image: url('icons/flash_cutter_counter.webp');
+}
 
+.skill-icon[data-icon="flash-cutter-decollation"] {
+  background-image: url('icons/flash_cutter_decollation.webp');
+}
 
 
 /* Skill Tooltip Styling */
