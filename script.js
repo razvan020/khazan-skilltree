@@ -1,4 +1,139 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // --- SKILL TREE DATA STRUCTURE ---
+  // Single source of truth for all skill tree data
+  const SKILL_TREES = {
+    "dual-wield": {
+      id: "dual-wield-tree",
+      title: "Dual Wield",
+      columns: [
+        {
+          id: "column-1",
+          title: "Swift Attack",
+          nodes: [
+            {
+              id: "c1-a",
+              title: "Blazing Assault",
+              type: "Swift Attack",
+              icon: "blazing-assault",
+              nodeType: "node-a",
+              maxPoints: 1,
+            },
+            {
+              id: "c1-b",
+              title: "Howling Blade",
+              type: "Passive",
+              icon: "howling-blade",
+              nodeType: "node-b",
+              maxPoints: 3,
+            },
+            {
+              id: "c1-c",
+              title: "Whirlwind",
+              type: "Passive",
+              icon: "whirlwind",
+              nodeType: "node-c",
+              maxPoints: 3,
+            },
+            {
+              id: "c1-d",
+              title: "Howling Blade: Punishment",
+              type: "Active Ability",
+              icon: "howling-blade-punishment",
+              nodeType: "node-d",
+              maxPoints: 1,
+            },
+            {
+              id: "c1-e",
+              title: "Whirlwind: Swiftness",
+              type: "Passive",
+              icon: "whirlwind-swiftness",
+              nodeType: "node-e",
+              maxPoints: 1,
+            },
+            {
+              id: "c1-f",
+              title: "Howling Blade: Resolve",
+              type: "Active Ability",
+              icon: "howling-blade-resolve",
+              nodeType: "node-f",
+              maxPoints: 1,
+            },
+            {
+              id: "c1-g",
+              title: "Phantom: Sword Dance",
+              type: "Passive",
+              icon: "phantom-sword-dance",
+              nodeType: "node-g",
+              maxPoints: 3,
+            },
+            {
+              id: "c1-h",
+              title: "Whirlwind: Chain",
+              type: "Active Ability",
+              icon: "whirlwind-chain",
+              nodeType: "node-h",
+              maxPoints: 1,
+            },
+          ],
+        },
+        {
+          id: "column-2",
+          title: "Potent Blow",
+          nodes: [
+            {
+              id: "c2-a",
+              title: "Howling Blade: Punishment",
+              type: "Active Ability",
+              icon: "howling-blade-punishment",
+              nodeType: "node-a",
+              maxPoints: 1,
+            },
+            {
+              id: "c2-b",
+              title: "Whirlwind: Swiftness",
+              type: "Passive",
+              icon: "whirlwind-swiftness",
+              nodeType: "node-b",
+              maxPoints: 1,
+            },
+            // Other nodes follow the same pattern
+          ],
+        },
+        // Other columns follow the same pattern
+      ],
+    },
+    greatsword: {
+      id: "greatsword-tree",
+      title: "Greatsword",
+      columns: [
+        {
+          id: "gs-column-0",
+          title: "Swift Attack",
+          nodes: [
+            {
+              id: "gs0-a",
+              title: "Savage Momentum",
+              type: "Swift Attack",
+              icon: "savage-momentum",
+              nodeType: "node-a",
+              maxPoints: 1,
+            },
+            {
+              id: "gs0-b",
+              title: "Ground Breaker",
+              type: "Passive",
+              nodeType: "node-b",
+              maxPoints: 3,
+            },
+            // Other nodes follow the same pattern
+          ],
+        },
+        // Other columns follow the same pattern
+      ],
+    },
+    // Additional weapon types would follow the same pattern
+  };
+
   // --- Tab Navigation Elements ---
   const tabs = document.querySelectorAll(".skill-tabs .tab-item");
   const tabContents = document.querySelectorAll(".skill-tree-content");
@@ -6,7 +141,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Game State Variables ---
   const availablePointsEl = document.getElementById("available-points");
-  let availablePoints = parseInt(availablePointsEl.textContent);
+  const availablePointsDisplay = document.querySelector(
+    "#available-points span"
+  );
+  let availablePoints = parseInt(
+    availablePointsEl.querySelector("span").textContent
+  );
   let activeTabIndex = 0;
 
   // Store the references to the delegated listener functions
@@ -37,14 +177,14 @@ document.addEventListener("DOMContentLoaded", () => {
       title: "Howling Blade",
       type: "Passive",
       description:
-        "Potent Blow during a swift attack. dodge swift attack, or Blowback: Vengeance.\n\n Activate a potent blow during a swift attack to deliver a chain of attacks.\n\nThe form of Howling Blade activated will vary depending on the level of the swift attack.\n\nAfter activation. press Swift Attack to chain into a swift attack of the next level.",
+        "Potent Blow during a swift attack. dodge swift attack, or Blowback: Vengeance.\n\nActivate a potent blow during a swift attack to deliver a chain of attacks.\n\nThe form of Howling Blade activated will vary depending on the level of the swift attack.\n\nAfter activation. press Swift Attack to chain into a swift attack of the next level.",
       requirements: "Requires Blazing Assault, Requires Mastery Level 2",
     },
     "c1-c": {
       title: "Whirlwind",
       type: "Passive",
       description:
-        "Press Potent Blow during swift attack, doge swift attack, or Blowback: Vengeance. \n\n Leaps up and attacks nearby enemies. \n\nPressing Potent Blow again after the upward attack chains into a downard attack.",
+        "Press Potent Blow during swift attack, dodge swift attack, or Blowback: Vengeance.\n\nLeaps up and attacks nearby enemies.\n\nPressing Potent Blow again after the upward attack chains into a downward attack.",
       requirements: "Requires Blazing Assault, Requires Mastery Level 2",
     },
     "c1-d": {
@@ -52,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "Active Ability",
       description:
         "Potent Blow after the fourth strike of a swift attack or after Blazing Assault.\n\nGain the ability to use a finishing blow after the fourth strike of a swift attack and after Blazing Assault.\n\nThe finishing blow consists of a dash followed by consecutive slashes. Press Potent Blow before the dash ends to chain into the consecutive slashes.",
-      requirements: "Requires Mastery Level 10 and  Howling Blade",
+      requirements: "Requires Mastery Level 10 and Howling Blade",
     },
     "c1-e": {
       title: "Whirlwind: Swiftness",
@@ -64,22 +204,71 @@ document.addEventListener("DOMContentLoaded", () => {
       title: "Howling Blade: Resolve",
       type: "Active Ability",
       description:
-        "Potent Blow after the fourth strike of a swift attack or after Blazing Assault. \n\nGain the ability to use a finishing blow after the fourth strike of a swift attack and after Blazing Assault.\n\nThe finishing blow consists of a dash followed by consecutive slashes. Press Potent Blow before the dash ends to chain into the consecutive slashes.",
+        "Potent Blow after the fourth strike of a swift attack or after Blazing Assault.\n\nGain the ability to use a finishing blow after the fourth strike of a swift attack and after Blazing Assault.\n\nThe finishing blow consists of a dash followed by consecutive slashes. Press Potent Blow before the dash ends to chain into the consecutive slashes.",
       requirements: "Requires Mastery Level 18 and Howling Blade: Punishment",
     },
     "c1-g": {
       title: "Phantom: Sword Dance",
       type: "Passive",
       description:
-        "Command: Ranged Attack/Skill Combination Key + Potent Blow \n\nResources Used: Spirit 2 \n\nAttack the enemy with the Phantom's power. \n\n For 40 seconds after using Phantom: Sword Dance. the Phantom will rush forward to attack alongside you when using Howling Blade or Whirlwind.",
+        "Command: Ranged Attack/Skill Combination Key + Potent Blow\n\nResources Used: Spirit 2\n\nAttack the enemy with the Phantom's power.\n\nFor 40 seconds after using Phantom: Sword Dance. the Phantom will rush forward to attack alongside you when using Howling Blade or Whirlwind.",
       requirements: "Requires Mastery Level 18",
     },
     "c1-h": {
       title: "Whirlwind: Chain",
       type: "Active Ability",
       description:
-        "Press Potent Blow after the downward attack from Whirlwind. \n\n Gain the ability to use a follow-up dash attack after the downward attack.",
+        "Press Potent Blow after the downward attack from Whirlwind.\n\nGain the ability to use a follow-up dash attack after the downward attack.",
       requirements: "Requires Mastery Level 18 and Whirlwind: Swiftness",
+    },
+    "c2-a": {
+      title: "Massive Blow",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after the third attack of a potent blow or the charged attack of a potent blow.\n\n Charge forward and attack after the final attack of a potent blow.\n\nThe damage of this skill increases when used after a fully charged potent blow.\n\nThis skill can also be chained after the final attack of potent blow-type attacks.",
+      requirements: "Has no requirements",
+    },
+    "c2-c": {
+      title: "Gale",
+      type: "Active Ability",
+      description:
+        "Hold Potent Blow \n\nCharged potent blows inflict the Injured status on ememies.\n\nGain the virgor effect every time an Unjured enemy takes damage.\n\nWhile under this effect, damage dealt increases with each stack, up to a maximum of 10 stacks.",
+      requirements: "Requires Mastery Level 2",
+    },
+    "c2-e": {
+      title: "Gale: Scar",
+      type: "Active Ability",
+      description:
+        "Detonate accumulated vigor to deal significant damage to enemies.\n\nActivate Gale: Scar and remove all vigor effects when striking an enemy with Gale while at 10 vigor stacks.",
+      requirements: "Requires Mastery Level 10 and Gale",
+    },
+    "c2-h": {
+      title: "Gale: Smash",
+      type: "Active Ability",
+      description:
+        "Resources Used: Spirit 2\n\nHold Potent Blow when landing a strike with Gale.\n\nDetonate vigor inside the enemy.\n\nPoise increases significantly during this attack. \n\nEach detonation of vigor grants additional stacks of vigo",
+      requirements: "Requires Mastery Level 18 and Gale: Scar",
+    },
+    "c2-b": {
+      title: "Dragon Slayer",
+      type: "Active Ability",
+      description:
+        "Hold Potent Blow\n\nCharged potent blows become dash attacks.",
+      requirements: "Requires Mastery Level 2",
+    },
+    "c2-d": {
+      title: "Dragon Slayer: Intuition",
+      type: "Active Ability",
+      description:
+        "Hold Potent Blow after Dragon Slayer.\n\nPressing Potent Blow again after using Dragon Slayer results in a double slash attack on the enemy.",
+      requirements: "Requires Mastery Level 10 and Dragon Slayer",
+    },
+    "c2-f": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
     },
 
     // Greatsword Swift Attack tree
@@ -114,11 +303,103 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add more skill data as needed
   };
 
-  // Add mouseenter and mouseleave events for all skill nodes
-  document.querySelectorAll(".skill-node").forEach((node) => {
-    node.addEventListener("mouseenter", (e) => showTooltip(e, node));
-    node.addEventListener("mouseleave", hideTooltip);
+  // --- ICON MAPPING SYSTEM ---
+  // Map of node IDs to icon types for easier maintenance
+  const nodeIconMap = {
+    "c1-a": "blazing-assault",
+    "c1-c": "whirlwind",
+    "c1-e": "whirlwind-swiftness",
+    "c1-h": "whirlwind-chain",
+    "c1-g": "phantom-sword-dance",
+    "c1-b": "howling-blade",
+    "c1-d": "howling-blade-punishment",
+    "c1-f": "howling-blade-resolve",
+    "c2-a": "massive-blow",
+    "c2-c": "gale",
+    "c2-e": "gale-scar",
+    "c2-h": "gale-smash",
+    "c2-b": "dragon-slayer",
+    "c2-d": "dragon-slayer-intuition",
+    "c2-f": "dragon-slayer-chain",
+    "gs0-a": "savage-momentum",
+    "gs0-b": "ground-breaker",
+    "gs0-c": "overwhelming-force",
+    "gs0-d": "seismic-impact",
+    "gs0-e": "ground-pound",
+    "gs0-f": "earth-shatter",
+    "gs0-g": "momentum-strike",
+    "gs0-h": "tremor-wave",
+    // Add more icon mappings as needed
+  };
+
+  // --- INITIALIZATION ---
+  // Apply icons to all nodes
+  applySkillIcons();
+
+  // Set up tooltips
+  setupTooltips();
+
+  // Initialize skill tree
+  setupInitialActiveTree();
+
+  // Draw the connection lines
+  drawAllLines();
+
+  // Update the point counters
+  updatePointCounters();
+
+  // --- EVENT LISTENERS ---
+  document.addEventListener("keydown", handleKeyPress);
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => setActiveTab(index));
   });
+
+  const resetAllBtn = document.getElementById("reset-all-points");
+  resetAllBtn.addEventListener("click", handleResetAll);
+
+  const pointsInput = document.getElementById("available-points-input");
+  const applyBtn = document.getElementById("apply-points");
+
+  // Initialize with current value
+  pointsInput.value = availablePoints;
+
+  // Apply button updates the available points
+  applyBtn.addEventListener("click", applyPointsChange);
+
+  // Allow Enter key to apply changes
+  pointsInput.addEventListener("keyup", (e) => {
+    if (e.key === "Enter") {
+      applyBtn.click();
+    }
+  });
+
+  // Track mouse movement when tooltip is visible to allow smoother interaction
+  document.addEventListener("mousemove", handleMouseMove);
+
+  // Check if element is clickable and update cursor accordingly
+  document.addEventListener("mouseover", handleMouseOver);
+
+  // Track mouse position for cursor follower
+  let mouseX = 0,
+    mouseY = 0;
+  let cursorX = 0,
+    cursorY = 0;
+
+  // Start the cursor animation
+  updateCursor();
+
+  // Hide default cursor
+  document.body.style.cursor = "none";
+
+  // --- TOOLTIP FUNCTIONS ---
+  function setupTooltips() {
+    // Add mouseenter and mouseleave events for all skill nodes
+    document.querySelectorAll(".skill-node").forEach((node) => {
+      node.addEventListener("mouseenter", (e) => showTooltip(e, node));
+      node.addEventListener("mouseleave", hideTooltip);
+    });
+  }
 
   function showTooltip(e, node) {
     const nodeId = node.id;
@@ -158,63 +439,6 @@ document.addEventListener("DOMContentLoaded", () => {
     tooltip.classList.remove("visible");
     tooltipVisible = false;
   }
-
-  function autoAssignIcons() {
-    // Use the skill data you already have
-    Object.entries(skillData).forEach(([nodeId, data]) => {
-      const node = document.getElementById(nodeId);
-      if (node) {
-        // Convert title to kebab-case for the icon name
-        const iconName = data.title.toLowerCase().replace(/\s+/g, "-");
-
-        // Create or update icon element
-        let iconElement = node.querySelector(".skill-icon");
-        if (!iconElement) {
-          iconElement = document.createElement("div");
-          iconElement.className = "skill-icon";
-          node.appendChild(iconElement);
-        }
-
-        // Set the icon name
-        iconElement.dataset.icon = iconName;
-      }
-    });
-  }
-
-  const nodeIconMap = {
-    "c1-a": "blazing-assault",
-    "c1-c": "whirlwind",
-    "c1-e": "whirlwind-swiftness",
-    "c1-h": "whirlwind-chain",
-    "c1-g": "phantom-sword-dance",
-    "c1-b": "howling-blade",
-    "c1-d": "howling-blade-punishment",
-    "c1-f": "howling-blade-resolve",
-    "gs0-a": "savage-momentum",
-    // Add more icon mappings as needed
-  };
-
-  // Apply icons based on the mapping
-  function applySkillIcons() {
-    Object.entries(nodeIconMap).forEach(([nodeId, iconType]) => {
-      const node = document.getElementById(nodeId);
-      if (node) {
-        // Check if icon already exists to avoid duplicates
-        let iconElement = node.querySelector(".skill-icon");
-        if (!iconElement) {
-          // Create the icon if it doesn't exist
-          iconElement = document.createElement("div");
-          iconElement.className = "skill-icon";
-          node.appendChild(iconElement);
-        }
-        // Set the data-icon attribute to determine which icon to display
-        iconElement.dataset.icon = iconType;
-      }
-    });
-  }
-
-  // Call this function when initializing
-  applySkillIcons();
 
   function positionTooltip(e) {
     const mouseX = e.clientX;
@@ -257,157 +481,26 @@ document.addEventListener("DOMContentLoaded", () => {
     tooltip.classList.add(arrowClass);
   }
 
-  // Track mouse movement when tooltip is visible to allow smoother interaction
-  document.addEventListener("mousemove", (e) => {
-    if (tooltipVisible) {
-      positionTooltip(e);
-    }
-  });
-
-  // Update cursor follower position smoothly with requestAnimationFrame
-  let mouseX = 0,
-    mouseY = 0;
-  let cursorX = 0,
-    cursorY = 0;
-
-  document.addEventListener("mousemove", (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
-
-  // Check if element is clickable and update cursor accordingly
-  document.addEventListener("mouseover", (e) => {
-    const target = e.target;
-    if (
-      target.classList.contains("skill-node") &&
-      !target.classList.contains("locked") &&
-      !target.classList.contains("path-locked")
-    ) {
-      cursorFollower.classList.add("active");
-    } else if (
-      target.tagName === "BUTTON" ||
-      target.classList.contains("tab-item") ||
-      target.tagName === "A"
-    ) {
-      cursorFollower.classList.add("active");
-    } else {
-      cursorFollower.classList.remove("active");
-    }
-  });
-
-  const resetAllBtn = document.getElementById("reset-all-points");
-
-  resetAllBtn.addEventListener("click", () => {
-    // Ask for confirmation before resetting
-    if (
-      !confirm(
-        "Are you sure you want to reset all skill points? This will clear your entire skill tree."
-      )
-    ) {
-      return;
-    }
-
-    // Get ALL nodes (not just from active tree)
-    const allTreeNodes = document.querySelectorAll(".skill-node");
-
-    // Track how many points we're returning
-    let totalPointsRefunded = 0;
-
-    // Reset each node
-    allTreeNodes.forEach((node) => {
-      const currentPoints = parseInt(node.dataset.currentPoints);
-      if (currentPoints > 0) {
-        totalPointsRefunded += currentPoints;
-        node.dataset.currentPoints = 0;
-      }
-
-      // IMPORTANT: Remove all lock classes regardless of points
-      node.classList.remove("path-locked");
-
-      // Also reset any other state classes that might cause issues
-      node.classList.remove("invested", "maxed");
-
-      // Make sure all nodes are either available or locked based on their prerequisites
-      if (node.dataset.prereq === undefined || node.dataset.prereq === "") {
-        // Root nodes should be available
-        node.classList.remove("locked");
-        node.classList.add("available");
-      } else {
-        // Non-root nodes should initially be locked
-        node.classList.remove("available");
-        node.classList.add("locked");
+  // --- ICON FUNCTIONS ---
+  function applySkillIcons() {
+    Object.entries(nodeIconMap).forEach(([nodeId, iconType]) => {
+      const node = document.getElementById(nodeId);
+      if (node) {
+        // Check if icon already exists to avoid duplicates
+        let iconElement = node.querySelector(".skill-icon");
+        if (!iconElement) {
+          // Create the icon if it doesn't exist
+          iconElement = document.createElement("div");
+          iconElement.className = "skill-icon";
+          node.appendChild(iconElement);
+        }
+        // Set the data-icon attribute to determine which icon to display
+        iconElement.dataset.icon = iconType;
       }
     });
-
-    // Update available points
-    availablePoints += totalPointsRefunded;
-    availablePointsDisplay.textContent = availablePoints;
-    pointsInput.value = availablePoints;
-
-    // Update node states and point counters
-    updateNodeStates();
-    updatePointCounters();
-
-    // Redraw lines immediately
-    drawAllLines();
-
-    // Confirmation message
-    const confirmMsg = document.createElement("span");
-    confirmMsg.textContent = `✓ Reset complete! Refunded ${totalPointsRefunded} points.`;
-    confirmMsg.classList.add("reset-confirmed-msg");
-    confirmMsg.style.color = "#ff9";
-    confirmMsg.style.marginLeft = "10px";
-    confirmMsg.style.fontSize = "0.9em";
-    resetAllBtn.parentNode.appendChild(confirmMsg);
-
-    // Log the action
-    console.log(
-      `Reset all skills, refunded ${totalPointsRefunded} points. New total: ${availablePoints}`
-    );
-
-    // Remove the confirmation message after a short delay
-    setTimeout(() => {
-      confirmMsg.remove();
-    }, 2500);
-  });
-
-  // Animation loop for smooth cursor following
-  function updateCursor() {
-    // Smoothly interpolate cursor position (easing effect)
-    const easing = 0.2;
-    cursorX += (mouseX - cursorX) * easing;
-    cursorY += (mouseY - cursorY) * easing;
-
-    cursorFollower.style.left = `${cursorX}px`;
-    cursorFollower.style.top = `${cursorY}px`;
-
-    // Continue animation loop
-    requestAnimationFrame(updateCursor);
   }
 
-  // Start the cursor animation
-  updateCursor();
-
-  // Hide default cursor
-  document.body.style.cursor = "none";
-
-  // --- Initialization ---
-  console.log("Initializing Skill Tree...");
-  setupInitialActiveTree(); // Initial setup
-
-  // --- Event Listeners ---
-  document.addEventListener("keydown", handleKeyPress);
-  tabs.forEach((tab, index) => {
-    tab.addEventListener("click", () => setActiveTab(index));
-  });
-  let resizeTimeout;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(drawAllLines, 150);
-  });
-
-  // --- Functions ---
-
+  // --- SKILL TREE NAVIGATION ---
   function handleKeyPress(event) {
     let newIndex = activeTabIndex;
     if (event.key === "q" || event.key === "Q") {
@@ -478,6 +571,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const initialTreeContent = tabContents[activeTabIndex];
     if (initialTreeContent) {
       setupActiveTree(initialTreeContent);
+      updatePointCounters(); // Initialize point counters
     } else {
       console.error("Initial active tree content not found!");
     }
@@ -495,7 +589,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
     activeTreeElement.addEventListener("click", currentTreeClickListener);
-    console.log(`Added click listener to tree ${activeTreeElement.id}`);
 
     // --- Attach Delegated Context Menu (Right-Click) Listener ---
     currentTreeContextMenuListener = function (event) {
@@ -510,181 +603,14 @@ document.addEventListener("DOMContentLoaded", () => {
       "contextmenu",
       currentTreeContextMenuListener
     );
-    console.log(`Added contextmenu listener to tree ${activeTreeElement.id}`);
 
     // Initial state update and line drawing for this tree
     updateNodeStates();
     requestAnimationFrame(drawAllLines); // Use rAF for initial draw
   }
 
-  // Update the lockAlternativePaths function to exclude common paths
-  function lockAlternativePaths(node) {
-    // Find all parents that list this node as a child
-    const allNodeIds = Array.from(document.querySelectorAll(".skill-node")).map(
-      (node) => node.id
-    );
-
-    for (const potentialParentId of allNodeIds) {
-      const potentialParent = document.getElementById(potentialParentId);
-      if (!potentialParent) continue;
-
-      const childrenIds = potentialParent.dataset.children?.split(",");
-      if (!childrenIds || childrenIds[0] === "") continue;
-
-      // Clean up the children IDs and check if our node is included
-      const trimmedChildrenIds = childrenIds.map((id) => id.trim());
-      if (!trimmedChildrenIds.includes(node.id)) continue;
-
-      // If this parent has multiple children AND node has points invested
-      if (
-        trimmedChildrenIds.length > 1 &&
-        parseInt(node.dataset.currentPoints) > 0
-      ) {
-        // Lock all other sibling nodes
-        for (const siblingId of trimmedChildrenIds) {
-          if (siblingId === node.id) continue; // Skip the node we're investing in
-
-          const siblingNode = document.getElementById(siblingId);
-          if (siblingNode) {
-            console.log(
-              `Locking alternative path node ${siblingNode.id} (sibling to ${node.id})`
-            );
-            siblingNode.classList.add("path-locked");
-
-            // Lock descendants, but respect common nodes (like 'swift-attack-g')
-            lockDescendantsExceptCommon(siblingNode);
-          }
-        }
-      }
-    }
-  }
-
-  // Update lockDescendantsExceptCommon function to be more permissive with common nodes
-  function lockDescendantsExceptCommon(node) {
-    // Skip locking if this is a common node
-    if (commonNodeIds.includes(node.id)) {
-      console.log(`Skipping lock on common node: ${node.id}`);
-      return;
-    }
-
-    // Lock this node
-    node.classList.add("path-locked");
-    console.log(`Path-locking node: ${node.id}`);
-
-    // Get all children of this node
-    const childrenIds = node.dataset.children?.split(",");
-    if (!childrenIds || childrenIds[0] === "") return;
-
-    // Recursively lock non-common children
-    childrenIds.forEach((childId) => {
-      const childNode = document.getElementById(childId.trim());
-      if (childNode) {
-        // Check if this child is a common node before locking
-        if (!commonNodeIds.includes(childNode.id)) {
-          lockDescendantsExceptCommon(childNode);
-        } else {
-          console.log(
-            `Found common node during locking: ${childNode.id} - keeping accessible`
-          );
-        }
-      }
-    });
-  }
-
-  // Update checkPrerequisites to correctly handle common nodes
-  function checkPrerequisites(node) {
-    // Special handling for common nodes
-    if (commonNodeIds.includes(node.id)) {
-      console.log(`Checking prereqs for common node: ${node.id}`);
-      const prereqIds = node.dataset.prereq?.split(",");
-      if (!prereqIds || prereqIds[0] === "") return true; // No prerequisites
-
-      // For common nodes, ANY prerequisite with points satisfies the requirement
-      const anyPrereqMet = prereqIds.some((prereqId) => {
-        const prereqNode = document.getElementById(prereqId.trim());
-        const hasPoints =
-          prereqNode && parseInt(prereqNode.dataset.currentPoints) > 0;
-        if (hasPoints) {
-          console.log(
-            `Common node ${node.id} - prereq ${prereqNode.id} is met with points`
-          );
-        }
-        return hasPoints;
-      });
-
-      return anyPrereqMet;
-    }
-
-    // For regular nodes, check if path-locked first
-    if (node.classList.contains("path-locked")) {
-      return false;
-    }
-
-    // Regular prerequisite check
-    const prereqIds = node.dataset.prereq?.split(",");
-    if (!prereqIds || prereqIds[0] === "") return true; // No prerequisites
-
-    // Using .some() - at least ONE prerequisite must be met
-    const met = prereqIds.some((prereqId) => {
-      const prereqNode = document.getElementById(prereqId.trim());
-      return prereqNode && parseInt(prereqNode.dataset.currentPoints) > 0;
-    });
-
-    return met;
-  }
-
-  // Update the function that handles node selection to respect common nodes
-  function wouldViolateSinglePathRule(node) {
-    // Common nodes never violate the single-path rule
-    if (commonNodeIds.includes(node.id)) {
-      return false;
-    }
-
-    // Standard path violation check for non-common nodes
-    const allNodeIds = Array.from(document.querySelectorAll(".skill-node")).map(
-      (node) => node.id
-    );
-
-    for (const potentialParentId of allNodeIds) {
-      const potentialParent = document.getElementById(potentialParentId);
-      if (!potentialParent) continue;
-
-      const childrenIds = potentialParent.dataset.children?.split(",");
-      if (!childrenIds || childrenIds[0] === "") continue;
-
-      const trimmedChildrenIds = childrenIds.map((id) => id.trim());
-      if (!trimmedChildrenIds.includes(node.id)) continue;
-
-      if (
-        trimmedChildrenIds.length > 1 &&
-        parseInt(potentialParent.dataset.currentPoints) > 0
-      ) {
-        for (const siblingId of trimmedChildrenIds) {
-          if (siblingId === node.id) continue;
-
-          const siblingNode = document.getElementById(siblingId);
-          if (siblingNode && parseInt(siblingNode.dataset.currentPoints) > 0) {
-            console.log(
-              `Cannot invest in ${node.id}: sibling ${siblingNode.id} already has points`
-            );
-            return true;
-          }
-        }
-      }
-    }
-
-    return false;
-  }
-
-  // Replace the existing lockDescendants function with our new one
-  function lockDescendants(node) {
-    lockDescendantsExceptCommon(node);
-  }
-
-  // Fix handleSkillLearn to properly check and set path locking
+  // --- SKILL NODE INTERACTION ---
   function handleSkillLearn(clickedNode) {
-    console.log(`Handling learn for: ${clickedNode.id}`);
-
     // Highlight Logic
     const activeTreeContent = tabContents[activeTabIndex];
     const currentHighlighted = activeTreeContent?.querySelector(
@@ -733,7 +659,7 @@ document.addEventListener("DOMContentLoaded", () => {
       currentPoints++;
       availablePoints--;
       clickedNode.dataset.currentPoints = currentPoints;
-      availablePointsEl.textContent = availablePoints;
+      updateAvailablePointsDisplay();
 
       // If this is the first point in this node, lock alternative paths
       if (currentPoints === 1) {
@@ -766,7 +692,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Simply remove one point
       clickedNode.dataset.currentPoints = currentPoints - 1;
       availablePoints++;
-      availablePointsEl.textContent = availablePoints;
+      updateAvailablePointsDisplay();
 
       updateNodeStates(); // Update visual states
       updatePointCounters(); // Update the point counters
@@ -803,7 +729,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Update the available points
       availablePoints += totalPointsToReturn;
-      availablePointsEl.textContent = availablePoints;
+      updateAvailablePointsDisplay();
 
       // Path unlocking code as before...
       if (
@@ -842,14 +768,398 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function setupInitialActiveTree() {
-    const initialTreeContent = tabContents[activeTabIndex];
-    if (initialTreeContent) {
-      setupActiveTree(initialTreeContent);
-      updatePointCounters(); // Initialize point counters
-    } else {
-      console.error("Initial active tree content not found!");
+  // --- RESET ALL POINTS ---
+  function handleResetAll() {
+    // Ask for confirmation before resetting
+    if (
+      !confirm(
+        "Are you sure you want to reset all skill points? This will clear your entire skill tree."
+      )
+    ) {
+      return;
     }
+
+    // Get ALL nodes (not just from active tree)
+    const allTreeNodes = document.querySelectorAll(".skill-node");
+
+    // Track how many points we're returning
+    let totalPointsRefunded = 0;
+
+    // Reset each node
+    allTreeNodes.forEach((node) => {
+      const currentPoints = parseInt(node.dataset.currentPoints);
+      if (currentPoints > 0) {
+        totalPointsRefunded += currentPoints;
+        node.dataset.currentPoints = 0;
+      }
+
+      // IMPORTANT: Remove all lock classes regardless of points
+      node.classList.remove("path-locked");
+
+      // Also reset any other state classes that might cause issues
+      node.classList.remove("invested", "maxed");
+
+      // Make sure all nodes are either available or locked based on their prerequisites
+      if (node.dataset.prereq === undefined || node.dataset.prereq === "") {
+        // Root nodes should be available
+        node.classList.remove("locked");
+        node.classList.add("available");
+      } else {
+        // Non-root nodes should initially be locked
+        node.classList.remove("available");
+        node.classList.add("locked");
+      }
+    });
+
+    // Update available points
+    availablePoints += totalPointsRefunded;
+    updateAvailablePointsDisplay();
+    pointsInput.value = availablePoints;
+
+    // Update node states and point counters
+    updateNodeStates();
+    updatePointCounters();
+
+    // Redraw lines immediately
+    drawAllLines();
+
+    // Confirmation message
+    const confirmMsg = document.createElement("span");
+    confirmMsg.textContent = `✓ Reset complete! Refunded ${totalPointsRefunded} points.`;
+    confirmMsg.classList.add("reset-confirmed-msg");
+    confirmMsg.style.color = "#ff9";
+    confirmMsg.style.marginLeft = "10px";
+    confirmMsg.style.fontSize = "0.9em";
+    resetAllBtn.parentNode.appendChild(confirmMsg);
+
+    // Remove the confirmation message after a short delay
+    setTimeout(() => {
+      confirmMsg.remove();
+    }, 2500);
+  }
+
+  // --- APPLY POINTS CHANGE ---
+  function applyPointsChange() {
+    let newPoints = parseInt(pointsInput.value);
+    const oldPoints = availablePoints;
+
+    // Check if valid number and within limits
+    if (isNaN(newPoints)) {
+      pointsInput.value = oldPoints;
+      return;
+    }
+
+    // Enforce min/max limits
+    if (newPoints < 0) {
+      newPoints = 0;
+      pointsInput.value = 0;
+    } else if (newPoints > 350) {
+      newPoints = 350;
+      pointsInput.value = 350;
+    }
+
+    // Update the available points
+    availablePoints = newPoints;
+    updateAvailablePointsDisplay();
+
+    console.log(`Updated available points: ${oldPoints} → ${availablePoints}`);
+
+    // Optional: show a brief confirmation message
+    const confirmMsg = document.createElement("span");
+    confirmMsg.textContent = "✓ Updated!";
+    confirmMsg.classList.add("points-updated-msg");
+    confirmMsg.style.color = "#8f8";
+    confirmMsg.style.marginLeft = "10px";
+    confirmMsg.style.fontSize = "0.9em";
+    applyBtn.parentNode.appendChild(confirmMsg);
+
+    // Remove the confirmation message after a short delay
+    setTimeout(() => {
+      confirmMsg.remove();
+    }, 1500);
+  }
+
+  // --- EVENT HANDLER FUNCTIONS ---
+  function handleMouseMove(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    if (tooltipVisible) {
+      positionTooltip(e);
+    }
+  }
+
+  function handleMouseOver(e) {
+    const target = e.target;
+    if (
+      target.classList.contains("skill-node") &&
+      !target.classList.contains("locked") &&
+      !target.classList.contains("path-locked")
+    ) {
+      cursorFollower.classList.add("active");
+    } else if (
+      target.tagName === "BUTTON" ||
+      target.classList.contains("tab-item") ||
+      target.tagName === "A"
+    ) {
+      cursorFollower.classList.add("active");
+    } else {
+      cursorFollower.classList.remove("active");
+    }
+  }
+
+  // --- UTILITY FUNCTIONS ---
+  function updateAvailablePointsDisplay() {
+    availablePointsDisplay.textContent = availablePoints;
+  }
+
+  // Animation loop for smooth cursor following
+  function updateCursor() {
+    // Smoothly interpolate cursor position (easing effect)
+    const easing = 0.2;
+    cursorX += (mouseX - cursorX) * easing;
+    cursorY += (mouseY - cursorY) * easing;
+
+    cursorFollower.style.left = `${cursorX}px`;
+    cursorFollower.style.top = `${cursorY}px`;
+
+    // Continue animation loop
+    requestAnimationFrame(updateCursor);
+  }
+
+  // --- SKILL NODE STATE MANAGEMENT ---
+  function updateNodeStates() {
+    const activeTreeContent = tabContents[activeTabIndex];
+    if (!activeTreeContent) return;
+    const currentSkillNodes = activeTreeContent.querySelectorAll(".skill-node");
+
+    let changed = false; // Flag to see if any state actually changed
+
+    currentSkillNodes.forEach((node) => {
+      const originalClasses = node.className; // Store original classes
+      const isPathLocked = node.classList.contains("path-locked");
+
+      const maxPoints = parseInt(node.dataset.maxPoints);
+      const currentPoints = parseInt(node.dataset.currentPoints);
+      const prereqMet = checkPrerequisites(node);
+      const isHighlighted = node.classList.contains("highlighted");
+
+      // Reset state classes (keep 'skill-node', 'highlighted', and 'path-locked')
+      node.classList.remove("locked", "available", "invested", "maxed");
+      if (isHighlighted) node.classList.add("highlighted");
+      if (isPathLocked) node.classList.add("path-locked");
+
+      if (currentPoints >= maxPoints) {
+        node.classList.add("maxed");
+        unlockChildren(node);
+      } else if (currentPoints > 0) {
+        node.classList.add("invested");
+        unlockChildren(node);
+      } else if (prereqMet && !isPathLocked) {
+        node.classList.add("available");
+        checkAndLockChildren(node);
+      } else {
+        node.classList.add("locked");
+        checkAndLockChildren(node);
+      }
+
+      if (node.className !== originalClasses) {
+        changed = true;
+      }
+    });
+
+    // Ensure common nodes are properly handled after all other nodes
+    ensureCommonNodesAccessible();
+
+    // Only redraw lines if a state actually changed
+    if (changed) {
+      clearTimeout(window.drawLinesTimeout);
+      window.drawLinesTimeout = setTimeout(drawAllLines, 50);
+    }
+  }
+
+  function updatePointCounters() {
+    // Get all nodes that might have multiple levels
+    const multiLevelNodes = document.querySelectorAll(
+      ".skill-node[data-max-points]"
+    );
+
+    multiLevelNodes.forEach((node) => {
+      const maxPoints = parseInt(node.dataset.maxPoints);
+
+      // Only add counters to nodes that can have multiple points
+      if (maxPoints > 1) {
+        const currentPoints = parseInt(node.dataset.currentPoints);
+
+        // Check if counter already exists
+        let counter = node.querySelector(".point-counter");
+
+        // If counter doesn't exist, create it
+        if (!counter) {
+          counter = document.createElement("span");
+          counter.classList.add("point-counter");
+          node.appendChild(counter);
+        }
+
+        // Update counter text
+        counter.textContent = `${currentPoints}/${maxPoints}`;
+      }
+    });
+  }
+
+  function lockAlternativePaths(node) {
+    // Find all parents that list this node as a child
+    const allNodeIds = Array.from(document.querySelectorAll(".skill-node")).map(
+      (node) => node.id
+    );
+
+    for (const potentialParentId of allNodeIds) {
+      const potentialParent = document.getElementById(potentialParentId);
+      if (!potentialParent) continue;
+
+      const childrenIds = potentialParent.dataset.children?.split(",");
+      if (!childrenIds || childrenIds[0] === "") continue;
+
+      // Clean up the children IDs and check if our node is included
+      const trimmedChildrenIds = childrenIds.map((id) => id.trim());
+      if (!trimmedChildrenIds.includes(node.id)) continue;
+
+      // If this parent has multiple children AND node has points invested
+      if (
+        trimmedChildrenIds.length > 1 &&
+        parseInt(node.dataset.currentPoints) > 0
+      ) {
+        // Lock all other sibling nodes
+        for (const siblingId of trimmedChildrenIds) {
+          if (siblingId === node.id) continue; // Skip the node we're investing in
+
+          const siblingNode = document.getElementById(siblingId);
+          if (siblingNode) {
+            console.log(
+              `Locking alternative path node ${siblingNode.id} (sibling to ${node.id})`
+            );
+            siblingNode.classList.add("path-locked");
+
+            // Lock descendants, but respect common nodes (like 'swift-attack-g')
+            lockDescendantsExceptCommon(siblingNode);
+          }
+        }
+      }
+    }
+  }
+
+  function lockDescendantsExceptCommon(node) {
+    // Skip locking if this is a common node
+    if (commonNodeIds.includes(node.id)) {
+      console.log(`Skipping lock on common node: ${node.id}`);
+      return;
+    }
+
+    // Lock this node
+    node.classList.add("path-locked");
+    console.log(`Path-locking node: ${node.id}`);
+
+    // Get all children of this node
+    const childrenIds = node.dataset.children?.split(",");
+    if (!childrenIds || childrenIds[0] === "") return;
+
+    // Recursively lock non-common children
+    childrenIds.forEach((childId) => {
+      const childNode = document.getElementById(childId.trim());
+      if (childNode) {
+        // Check if this child is a common node before locking
+        if (!commonNodeIds.includes(childNode.id)) {
+          lockDescendantsExceptCommon(childNode);
+        } else {
+          console.log(
+            `Found common node during locking: ${childNode.id} - keeping accessible`
+          );
+        }
+      }
+    });
+  }
+
+  function checkPrerequisites(node) {
+    // Special handling for common nodes
+    if (commonNodeIds.includes(node.id)) {
+      console.log(`Checking prereqs for common node: ${node.id}`);
+      const prereqIds = node.dataset.prereq?.split(",");
+      if (!prereqIds || prereqIds[0] === "") return true; // No prerequisites
+
+      // For common nodes, ANY prerequisite with points satisfies the requirement
+      const anyPrereqMet = prereqIds.some((prereqId) => {
+        const prereqNode = document.getElementById(prereqId.trim());
+        const hasPoints =
+          prereqNode && parseInt(prereqNode.dataset.currentPoints) > 0;
+        if (hasPoints) {
+          console.log(
+            `Common node ${node.id} - prereq ${prereqNode.id} is met with points`
+          );
+        }
+        return hasPoints;
+      });
+
+      return anyPrereqMet;
+    }
+
+    // For regular nodes, check if path-locked first
+    if (node.classList.contains("path-locked")) {
+      return false;
+    }
+
+    // Regular prerequisite check
+    const prereqIds = node.dataset.prereq?.split(",");
+    if (!prereqIds || prereqIds[0] === "") return true; // No prerequisites
+
+    // Using .some() - at least ONE prerequisite must be met
+    const met = prereqIds.some((prereqId) => {
+      const prereqNode = document.getElementById(prereqId.trim());
+      return prereqNode && parseInt(prereqNode.dataset.currentPoints) > 0;
+    });
+
+    return met;
+  }
+
+  function wouldViolateSinglePathRule(node) {
+    // Common nodes never violate the single-path rule
+    if (commonNodeIds.includes(node.id)) {
+      return false;
+    }
+
+    // Standard path violation check for non-common nodes
+    const allNodeIds = Array.from(document.querySelectorAll(".skill-node")).map(
+      (node) => node.id
+    );
+
+    for (const potentialParentId of allNodeIds) {
+      const potentialParent = document.getElementById(potentialParentId);
+      if (!potentialParent) continue;
+
+      const childrenIds = potentialParent.dataset.children?.split(",");
+      if (!childrenIds || childrenIds[0] === "") continue;
+
+      const trimmedChildrenIds = childrenIds.map((id) => id.trim());
+      if (!trimmedChildrenIds.includes(node.id)) continue;
+
+      if (
+        trimmedChildrenIds.length > 1 &&
+        parseInt(potentialParent.dataset.currentPoints) > 0
+      ) {
+        for (const siblingId of trimmedChildrenIds) {
+          if (siblingId === node.id) continue;
+
+          const siblingNode = document.getElementById(siblingId);
+          if (siblingNode && parseInt(siblingNode.dataset.currentPoints) > 0) {
+            console.log(
+              `Cannot invest in ${node.id}: sibling ${siblingNode.id} already has points`
+            );
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
   }
 
   function unlockAllPathsFromParent(node) {
@@ -951,62 +1261,73 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  const availablePointsDisplay = document.querySelector(
-    "#available-points span"
-  );
-  const pointsInput = document.getElementById("available-points-input");
-  const applyBtn = document.getElementById("apply-points");
+  function unlockAlternativePaths(node) {
+    // Find all parents that list this node as a child
+    const allNodeIds = Array.from(document.querySelectorAll(".skill-node")).map(
+      (node) => node.id
+    );
 
-  // Initialize with current value
-  pointsInput.value = availablePoints;
+    for (const potentialParentId of allNodeIds) {
+      const potentialParent = document.getElementById(potentialParentId);
+      if (!potentialParent) continue;
 
-  // Apply button updates the available points
-  applyBtn.addEventListener("click", () => {
-    let newPoints = parseInt(pointsInput.value);
-    const oldPoints = availablePoints;
+      const childrenIds = potentialParent.dataset.children?.split(",");
+      if (!childrenIds || childrenIds[0] === "") continue;
 
-    // Check if valid number and within limits
-    if (isNaN(newPoints)) {
-      pointsInput.value = oldPoints;
-      return;
+      // Clean up the children IDs and check if our node is included
+      const trimmedChildrenIds = childrenIds.map((id) => id.trim());
+      if (!trimmedChildrenIds.includes(node.id)) continue;
+
+      // If this parent has multiple children
+      if (trimmedChildrenIds.length > 1) {
+        // Check if any other siblings have points
+        let otherSiblingsHavePoints = false;
+        for (const siblingId of trimmedChildrenIds) {
+          if (siblingId === node.id) continue;
+
+          const siblingNode = document.getElementById(siblingId);
+          if (siblingNode && parseInt(siblingNode.dataset.currentPoints) > 0) {
+            otherSiblingsHavePoints = true;
+            break;
+          }
+        }
+
+        // Only unlock if no other siblings have points
+        if (!otherSiblingsHavePoints) {
+          for (const siblingId of trimmedChildrenIds) {
+            if (siblingId === node.id) continue;
+
+            const siblingNode = document.getElementById(siblingId);
+            if (siblingNode && siblingNode.classList.contains("path-locked")) {
+              console.log(`Unlocking alternative path node ${siblingNode.id}`);
+              siblingNode.classList.remove("path-locked");
+              unlockDescendants(siblingNode);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function unlockDescendants(node) {
+    // Always unlock this node unless it's already a common node that's unlocked
+    if (
+      !commonNodeIds.includes(node.id) ||
+      node.classList.contains("path-locked")
+    ) {
+      node.classList.remove("path-locked");
     }
 
-    // Enforce min/max limits
-    if (newPoints < 0) {
-      newPoints = 0;
-      pointsInput.value = 0;
-    } else if (newPoints > 350) {
-      newPoints = 350;
-      pointsInput.value = 350;
-    }
+    const childrenIds = node.dataset.children?.split(",");
+    if (!childrenIds || childrenIds[0] === "") return;
 
-    // Update the available points
-    availablePoints = newPoints;
-    availablePointsDisplay.textContent = availablePoints;
-
-    console.log(`Updated available points: ${oldPoints} → ${availablePoints}`);
-
-    // Optional: show a brief confirmation message
-    const confirmMsg = document.createElement("span");
-    confirmMsg.textContent = "✓ Updated!";
-    confirmMsg.classList.add("points-updated-msg");
-    confirmMsg.style.color = "#8f8";
-    confirmMsg.style.marginLeft = "10px";
-    confirmMsg.style.fontSize = "0.9em";
-    applyBtn.parentNode.appendChild(confirmMsg);
-
-    // Remove the confirmation message after a short delay
-    setTimeout(() => {
-      confirmMsg.remove();
-    }, 1500);
-  });
-
-  // Allow Enter key to apply changes
-  pointsInput.addEventListener("keyup", (e) => {
-    if (e.key === "Enter") {
-      applyBtn.click();
-    }
-  });
+    childrenIds.forEach((childId) => {
+      const childNode = document.getElementById(childId.trim());
+      if (childNode) {
+        unlockDescendants(childNode);
+      }
+    });
+  }
 
   function unlockDescendantsRecursive(node) {
     // Forcibly remove the path-locked class
@@ -1027,31 +1348,83 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function updatePointCounters() {
-    // Get all nodes that might have multiple levels
-    const multiLevelNodes = document.querySelectorAll(
-      ".skill-node[data-max-points]"
-    );
+  function ensureCommonNodesAccessible() {
+    // For each common node, ensure it's unlocked and check if prerequisites are met
+    commonNodeIds.forEach((nodeId) => {
+      const commonNode = document.getElementById(nodeId);
+      if (!commonNode) return;
 
-    multiLevelNodes.forEach((node) => {
-      const maxPoints = parseInt(node.dataset.maxPoints);
+      // Remove path-locked class from common nodes
+      commonNode.classList.remove("path-locked");
 
-      // Only add counters to nodes that can have multiple points
-      if (maxPoints > 1) {
-        const currentPoints = parseInt(node.dataset.currentPoints);
+      // Check if prerequisites are met to determine if it should be available
+      const prereqsMet = checkPrerequisites(commonNode);
 
-        // Check if counter already exists
-        let counter = node.querySelector(".point-counter");
-
-        // If counter doesn't exist, create it
-        if (!counter) {
-          counter = document.createElement("span");
-          counter.classList.add("point-counter");
-          node.appendChild(counter);
+      // Update the node state based on prerequisites
+      if (prereqsMet) {
+        if (parseInt(commonNode.dataset.currentPoints) > 0) {
+          commonNode.classList.remove("locked", "available", "maxed");
+          commonNode.classList.add("invested");
+        } else {
+          commonNode.classList.remove("locked", "invested", "maxed");
+          commonNode.classList.add("available");
         }
+      }
+    });
+  }
 
-        // Update counter text
-        counter.textContent = `${currentPoints}/${maxPoints}`;
+  function unlockChildren(node) {
+    const childrenIds = node.dataset.children?.split(",");
+    if (!childrenIds || childrenIds[0] === "") return;
+
+    childrenIds.forEach((childId) => {
+      const childNode = document.getElementById(childId.trim());
+      if (childNode && parseInt(childNode.dataset.currentPoints) === 0) {
+        // Check if prerequisites are met
+        if (checkPrerequisites(childNode)) {
+          // Check if child is in the active tree
+          if (
+            childNode.closest(".skill-tree-content.active") ===
+            tabContents[activeTabIndex]
+          ) {
+            // Only update if it would change the state
+            if (childNode.classList.contains("locked")) {
+              console.log(`Unlocking child: ${childNode.id} (prereqs now met)`);
+              childNode.classList.remove("locked");
+              childNode.classList.add("available");
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function checkAndLockChildren(parentNode) {
+    const childrenIds = parentNode.dataset.children?.split(",");
+    if (!childrenIds || childrenIds[0] === "") return;
+
+    childrenIds.forEach((childId) => {
+      const childNode = document.getElementById(childId.trim());
+      // Check if child exists, has NO points, and is currently available
+      if (
+        childNode &&
+        parseInt(childNode.dataset.currentPoints) === 0 &&
+        childNode.classList.contains("available")
+      ) {
+        // Re-check if prerequisites are STILL met after parent potentially lost a point
+        if (!checkPrerequisites(childNode)) {
+          // Check if child is in the active tree before changing class
+          if (
+            childNode.closest(".skill-tree-content.active") ===
+            tabContents[activeTabIndex]
+          ) {
+            console.log(
+              `Locking child: ${childNode.id} (prereqs no longer met)`
+            );
+            childNode.classList.remove("available");
+            childNode.classList.add("locked");
+          }
+        }
       }
     });
   }
@@ -1092,91 +1465,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     });
-  }
-
-  // Add this function to ensure common nodes are always properly handled
-  function ensureCommonNodesAccessible() {
-    // For each common node, ensure it's unlocked and check if prerequisites are met
-    commonNodeIds.forEach((nodeId) => {
-      const commonNode = document.getElementById(nodeId);
-      if (!commonNode) return;
-
-      // Remove path-locked class from common nodes
-      commonNode.classList.remove("path-locked");
-
-      // Check if prerequisites are met to determine if it should be available
-      const prereqsMet = checkPrerequisites(commonNode);
-
-      // Update the node state based on prerequisites
-      if (prereqsMet) {
-        if (parseInt(commonNode.dataset.currentPoints) > 0) {
-          commonNode.classList.remove("locked", "available", "maxed");
-          commonNode.classList.add("invested");
-        } else {
-          commonNode.classList.remove("locked", "invested", "maxed");
-          commonNode.classList.add("available");
-        }
-      }
-
-      console.log(
-        `Ensured common node ${nodeId} is properly handled - prereqs met: ${prereqsMet}`
-      );
-    });
-  }
-
-  // Update updateNodeStates to handle path-locked class correctly
-  function updateNodeStates() {
-    const activeTreeContent = tabContents[activeTabIndex];
-    if (!activeTreeContent) return;
-    console.log(`Updating states for tree: ${activeTreeContent.id}`);
-    const currentSkillNodes = activeTreeContent.querySelectorAll(".skill-node");
-
-    let changed = false; // Flag to see if any state actually changed
-
-    currentSkillNodes.forEach((node) => {
-      const originalClasses = node.className; // Store original classes
-      const isPathLocked = node.classList.contains("path-locked");
-
-      const maxPoints = parseInt(node.dataset.maxPoints);
-      const currentPoints = parseInt(node.dataset.currentPoints);
-      const prereqMet = checkPrerequisites(node);
-      const isHighlighted = node.classList.contains("highlighted");
-
-      // Reset state classes (keep 'skill-node', 'highlighted', and 'path-locked')
-      node.classList.remove("locked", "available", "invested", "maxed");
-      if (isHighlighted) node.classList.add("highlighted");
-      if (isPathLocked) node.classList.add("path-locked");
-
-      if (currentPoints >= maxPoints) {
-        node.classList.add("maxed");
-        unlockChildren(node);
-      } else if (currentPoints > 0) {
-        node.classList.add("invested");
-        unlockChildren(node);
-      } else if (prereqMet && !isPathLocked) {
-        node.classList.add("available");
-        checkAndLockChildren(node);
-      } else {
-        node.classList.add("locked");
-        checkAndLockChildren(node);
-      }
-
-      if (node.className !== originalClasses) {
-        changed = true;
-      }
-    });
-
-    // Ensure common nodes are properly handled after all other nodes
-    ensureCommonNodesAccessible();
-
-    // Only redraw lines if a state actually changed
-    if (changed) {
-      console.log("Node states changed, redrawing lines.");
-      clearTimeout(window.drawLinesTimeout);
-      window.drawLinesTimeout = setTimeout(drawAllLines, 50);
-    } else {
-      console.log("No node states changed.");
-    }
   }
 
   function resetAllDescendants(parentNode) {
@@ -1258,135 +1546,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return true;
   }
 
-  // Add these functions right before the closing DOMContentLoaded bracket
-
-  // Add missing unlockAlternativePaths function
-  function unlockAlternativePaths(node) {
-    // Find all parents that list this node as a child
-    const allNodeIds = Array.from(document.querySelectorAll(".skill-node")).map(
-      (node) => node.id
-    );
-
-    for (const potentialParentId of allNodeIds) {
-      const potentialParent = document.getElementById(potentialParentId);
-      if (!potentialParent) continue;
-
-      const childrenIds = potentialParent.dataset.children?.split(",");
-      if (!childrenIds || childrenIds[0] === "") continue;
-
-      // Clean up the children IDs and check if our node is included
-      const trimmedChildrenIds = childrenIds.map((id) => id.trim());
-      if (!trimmedChildrenIds.includes(node.id)) continue;
-
-      // If this parent has multiple children
-      if (trimmedChildrenIds.length > 1) {
-        // Check if any other siblings have points
-        let otherSiblingsHavePoints = false;
-        for (const siblingId of trimmedChildrenIds) {
-          if (siblingId === node.id) continue;
-
-          const siblingNode = document.getElementById(siblingId);
-          if (siblingNode && parseInt(siblingNode.dataset.currentPoints) > 0) {
-            otherSiblingsHavePoints = true;
-            break;
-          }
-        }
-
-        // Only unlock if no other siblings have points
-        if (!otherSiblingsHavePoints) {
-          for (const siblingId of trimmedChildrenIds) {
-            if (siblingId === node.id) continue;
-
-            const siblingNode = document.getElementById(siblingId);
-            if (siblingNode && siblingNode.classList.contains("path-locked")) {
-              console.log(`Unlocking alternative path node ${siblingNode.id}`);
-              siblingNode.classList.remove("path-locked");
-              unlockDescendants(siblingNode);
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // Update unlockDescendants to preserve common node status
-  function unlockDescendants(node) {
-    // Always unlock this node unless it's already a common node that's unlocked
-    if (
-      !commonNodeIds.includes(node.id) ||
-      node.classList.contains("path-locked")
-    ) {
-      node.classList.remove("path-locked");
-    }
-
-    const childrenIds = node.dataset.children?.split(",");
-    if (!childrenIds || childrenIds[0] === "") return;
-
-    childrenIds.forEach((childId) => {
-      const childNode = document.getElementById(childId.trim());
-      if (childNode) {
-        unlockDescendants(childNode);
-      }
-    });
-  }
-
-  // Add missing unlockChildren function (if it doesn't exist)
-  function unlockChildren(node) {
-    const childrenIds = node.dataset.children?.split(",");
-    if (!childrenIds || childrenIds[0] === "") return;
-
-    childrenIds.forEach((childId) => {
-      const childNode = document.getElementById(childId.trim());
-      if (childNode && parseInt(childNode.dataset.currentPoints) === 0) {
-        // Check if prerequisites are met
-        if (checkPrerequisites(childNode)) {
-          // Check if child is in the active tree
-          if (
-            childNode.closest(".skill-tree-content.active") ===
-            tabContents[activeTabIndex]
-          ) {
-            // Only update if it would change the state
-            if (childNode.classList.contains("locked")) {
-              console.log(`Unlocking child: ${childNode.id} (prereqs now met)`);
-              childNode.classList.remove("locked");
-              childNode.classList.add("available");
-            }
-          }
-        }
-      }
-    });
-  }
-
-  function checkAndLockChildren(parentNode) {
-    const childrenIds = parentNode.dataset.children?.split(",");
-    if (!childrenIds || childrenIds[0] === "") return;
-
-    childrenIds.forEach((childId) => {
-      const childNode = document.getElementById(childId.trim());
-      // Check if child exists, has NO points, and is currently available
-      if (
-        childNode &&
-        parseInt(childNode.dataset.currentPoints) === 0 &&
-        childNode.classList.contains("available")
-      ) {
-        // Re-check if prerequisites are STILL met after parent potentially lost a point
-        if (!checkPrerequisites(childNode)) {
-          // Check if child is in the active tree before changing class
-          if (
-            childNode.closest(".skill-tree-content.active") ===
-            tabContents[activeTabIndex]
-          ) {
-            console.log(
-              `Locking child: ${childNode.id} (prereqs no longer met)`
-            );
-            childNode.classList.remove("available");
-            childNode.classList.add("locked");
-          }
-        }
-      }
-    });
-  }
-
+  // --- LINE DRAWING ---
   function drawAllLines() {
     const activeTreeContent = tabContents[activeTabIndex];
     if (!activeTreeContent) return;
@@ -1405,7 +1565,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (svgLinesContainer) svgLinesContainer.innerHTML = "";
       return;
     }
-    // console.log(`Drawing lines for tree: ${activeTreeContent.id} (${currentSkillNodes.length} nodes)`);
 
     svgLinesContainer.innerHTML = ""; // Clear only the active SVG container
     const parentRect = activeTreeContent.getBoundingClientRect(); // Use active content div as reference
@@ -1421,7 +1580,6 @@ document.addEventListener("DOMContentLoaded", () => {
             childNode.closest(".skill-tree-content.active") ===
               activeTreeContent
           ) {
-            // console.log(`Drawing line from ${node.id} to ${childNode.id}`); // Debug
             drawLine(
               node,
               childNode,
@@ -1494,6 +1652,7 @@ document.addEventListener("DOMContentLoaded", () => {
     svgContainer.appendChild(line);
   }
 
+  // --- GREATSWORD TREE SPECIFIC ---
   const greatswordNodes = {
     // Add Swift Attack nodes
     "gs0-a": "A",

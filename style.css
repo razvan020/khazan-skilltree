@@ -504,11 +504,6 @@ body {
 
 #c1-h::after { content: "H"; }
 
-#c2-a::after { content: "A"; }
-#c2-d::after { content: "D"; }
-#c2-e::after { content: "E"; }
-#c2-f::after { content: "F"; }
-#c2-h::after { content: "H"; }
 
 #c3-a::after { content: "A"; }
 #c3-d::after { content: "D"; }
@@ -594,6 +589,34 @@ body {
 
 .skill-icon[data-icon="howling-blade-resolve"] {
   background-image: url('icons/howling_blade_resolve.webp');
+}
+
+.skill-icon[data-icon="massive-blow"] {
+  background-image: url('icons/massive_blow.webp');
+}
+
+.skill-icon[data-icon="gale"] {
+  background-image: url('icons/gale.webp');
+}
+
+.skill-icon[data-icon="gale-scar"] {
+  background-image: url('icons/gale_scar.webp');
+}
+
+.skill-icon[data-icon="gale-smash"] {
+  background-image: url('icons/gale_smash.webp');
+}
+
+.skill-icon[data-icon="dragon-slayer"] {
+  background-image: url('icons/dragon_slayer.webp');
+}
+
+.skill-icon[data-icon="dragon-slayer-intuition"] {
+  background-image: url('icons/dragon_slayer_intuition.webp');
+}
+
+.skill-icon[data-icon="dragon-slayer-chain"] {
+  background-image: url('icons/dragon_slayer_chain.webp');
 }
 
 
