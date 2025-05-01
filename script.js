@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cursorY = 0;
 
   // Fetch data from JSON file
-  fetch("skillData.json")
+  fetch("./skillData.json")
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
