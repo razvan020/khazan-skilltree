@@ -505,14 +505,8 @@ body {
 #c1-h::after { content: "H"; }
 
 
-#c3-a::after { content: "A"; }
-#c3-d::after { content: "D"; }
-#c3-g::after { content: "G"; }
-#c3-h::after { content: "H"; }
-#c3-i::after { content: "I"; }
-#c3-j::after { content: "J"; }
-#c3-k::after { content: "K"; }
-#c3-l::after { content: "L"; }
+
+
 
 #c4-a::after { content: "A"; }
 #c4-b::after { content: "B"; }
@@ -552,6 +546,18 @@ body {
 .node-f .skill-icon,
 .node-h .skill-icon{
   transform: rotate(-45deg); /* Counter the 45deg rotation of the rhombus */
+}
+
+.node-g1 .skill-icon,
+.node-h1 .skill-icon,
+.node-j1 .skill-icon,
+.node-i1 .skill-icon,
+.node-k1 .skill-icon,
+.node-l1 .skill-icon
+{
+  transform: rotate(-45deg); /* Counter the 45deg rotation of the rhombus */
+  
+
 }
 
 /* Define icons using data-icon attributes */
@@ -618,6 +624,58 @@ body {
 .skill-icon[data-icon="dragon-slayer-chain"] {
   background-image: url('icons/dragon_slayer_chain.webp');
 }
+
+.skill-icon[data-icon="wind-chaser"] {
+  background-image: url('icons/wind_chaser.webp');
+}
+
+.skill-icon[data-icon="wind-chaser-swift"] {
+  background-image: url('icons/wind_chaser_swift.webp');
+}
+
+.skill-icon[data-icon="outrage"] {
+  background-image: url('icons/outrage.webp');
+}
+
+.skill-icon[data-icon="ruthless"] {
+  background-image: url('icons/ruthless.webp');
+}
+
+.skill-icon[data-icon="ruthless-stamina"] {
+  background-image: url('icons/ruthless_stamina.webp');
+}
+
+.skill-icon[data-icon="ruthless-strength"] {
+  background-image: url('icons/ruthless_strength.webp');
+}
+
+
+.skill-icon[data-icon="wind-piercer"] {
+  background-image: url('icons/wind_piercer.webp');
+}
+
+.skill-icon[data-icon="wind-piercer-persistence"] {
+  background-image: url('icons/wind_piercer_persistence.webp');
+}
+
+.skill-icon[data-icon="wind-piercer-mark"] {
+  background-image: url('icons/wind_piercer_mark.webp');
+}
+
+.skill-icon[data-icon="breeze-dash"] {
+  background-image: url('icons/breeze_dash.webp');
+}
+
+.skill-icon[data-icon="breeze-dash-chain"] {
+  background-image: url('icons/breeze_dash_chain.webp');
+}
+
+.skill-icon[data-icon="breeze-dash-triple"] {
+  background-image: url('icons/breeze_dash_triple.webp');
+}
+
+
+
 
 
 

@@ -270,6 +270,186 @@ document.addEventListener("DOMContentLoaded", () => {
         "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
       requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
     },
+    "c3-a": {
+      title: "Wind Chaser",
+      type: "Active Ability",
+      description:
+        "	Press Swift Attack or Potent Blow after spirit attack.\n\nGain the ability to use the second attack of a sprint attack.",
+      requirements: "Has no requirements",
+    },
+    "c3-b": {
+      title: "Outrage",
+      type: "Active Ability",
+      description:
+        "Potent Blow while spirnting\n\nDeliver a powerful strike while sprinting.\n\nCharging the attack increases the amount of stagger and damage inflicted.",
+      requirements: "Has no requirements",
+    },
+    "c3-c": {
+      title: "Ruthless",
+      type: "Active Ability",
+      description:
+        "Command: Skill Combination Key + Swift Attack\n\n Resources Used: Spirit 1\n\nSwiftly hack apart the enemy. After a successful strike. each successive input results in a flurry of attacks that increases in speed and consumes stamina.\n\nStopping the input or running out of stamina will automatically result in a finishing blow.\n\nDeliver a powerful finishing blow when the attack speed reaches its maximum.",
+      requirements: "Requires Mastery Level 2",
+    },
+    "c3-d": {
+      title: "Wind Chaser: Swift",
+      type: "Active Ability",
+      description:
+        "Potent Blow after a spirit attack\n\nSwiftly chains with a potent blow after a spirit atack.",
+      requirements: "Requires Mastery Level 2 and Wind Chaser",
+    },
+    "c3-e": {
+      title: "Breeze Dash",
+      type: "Active Ability",
+      description:
+        "Command: Skill Combination Key + Swift Attack\n\nResources Used: Spirit 1\n\nSwiftly dash forward and slash the enemy.\n\nThe dash slash can be used up to 2 times and nullifies the damage from enemy attacks when it starts. \n\nEach dash slash consumes i spirit charge",
+      requirements: "Requires Mastery Level 2",
+    },
+    "c3-f": {
+      title: "Wind Piercer",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c3-g": {
+      title: "Ruthless: Stamina",
+      type: "Active Ability",
+      description:
+        "The finishing blow of Ruthless is transformed into an arcing strike.\n\nRecover half of the stamina consumed if the strike hits an enemy.",
+      requirements: "Requires Mastery Level 26 and Ruthless",
+    },
+    "c3-h": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c3-i": {
+      title: "Breeze Dash: Chain",
+      type: "Active Ability",
+      description:
+        "The dash slashes of Breeze Dash deliver multiple strikes to enemies whose damage was nullified.",
+      requirements: "Requires Mastery Level 26 and Breeze Dash",
+    },
+    "c3-j": {
+      title: "Ruthless: Strength",
+      type: "Active Ability",
+      description: "Ruthless gains unbreakable poise.",
+      requirements: "	Requires Mastery Level 34 and Ruthless: Stamina",
+    },
+    "c3-k": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c3-l": {
+      title: "Breeze Dash: Triple",
+      type: "Active Ability",
+      description: "Allows for up to three dash slashes with Breeze Dash.",
+      requirements: "requires Mastery Level 34 and Breeze Dash: Chain",
+    },
+    "c4-a": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-b": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-c": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-d": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-e": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-f": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-g": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-h": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-i": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-j": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-k": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-l": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-m": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
+    "c4-n": {
+      title: "Dragon Slayer: Chain",
+      type: "Active Ability",
+      description:
+        "Press Potent Blow after Dragon Slayer: Intuition. \n\nPress Potent Blow again after using Dragon Slayer: Intuition to leap into the air with an attack.\n\nPressing Potent Blow again during the upward attack triggers a downward attack.",
+      requirements: "Requires Mastery Level 18 and Dragon Slayer: Intuition",
+    },
 
     // Greatsword Swift Attack tree
     "gs0-a": {
@@ -321,6 +501,32 @@ document.addEventListener("DOMContentLoaded", () => {
     "c2-b": "dragon-slayer",
     "c2-d": "dragon-slayer-intuition",
     "c2-f": "dragon-slayer-chain",
+    "c3-a": "wind-chaser",
+    "c3-b": "outrage",
+    "c3-c": "ruthless",
+    "c3-d": "wind-chaser-swift",
+    "c3-e": "breeze-dash",
+    "c3-f": "wind-piercer",
+    "c3-g": "ruthless-stamina",
+    "c3-h": "wind-piercer-persistence",
+    "c3-i": "breeze-dash-chain",
+    "c3-j": "ruthless-strength",
+    "c3-k": "wind-piercer-mark",
+    "c3-l": "breeze-dash-triple",
+    "c4-a": "dragon-slayer-chain",
+    "c4-b": "dragon-slayer-chain",
+    "c4-c": "dragon-slayer-chain",
+    "c4-d": "dragon-slayer-chain",
+    "c4-e": "dragon-slayer-chain",
+    "c4-f": "dragon-slayer-chain",
+    "c4-g": "dragon-slayer-chain",
+    "c4-h": "dragon-slayer-chain",
+    "c4-i": "dragon-slayer-chain",
+    "c4-j": "dragon-slayer-chain",
+    "c4-k": "dragon-slayer-chain",
+    "c4-l": "dragon-slayer-chain",
+    "c4-m": "dragon-slayer-chain",
+    "c4-n": "dragon-slayer-chain",
     "gs0-a": "savage-momentum",
     "gs0-b": "ground-breaker",
     "gs0-c": "overwhelming-force",
